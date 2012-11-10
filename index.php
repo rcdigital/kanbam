@@ -226,7 +226,7 @@
                                     <span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu assignedToList">
-                                    <li ng-repeat="member in currentProject.memberships"><a href="#">{{member.name}}</a></li>
+                                    <li ng-repeat="member in currentProject.memberships"><a href="#" id="{{member.id}}">{{member.name}}</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -239,6 +239,11 @@
                         </div>
                     </div>
                     <hr />
+                    
+                    <!-- 
+                    
+                    -- The enumerations works only in 2.2 version and I havent test this feature with my current version 
+                    
                     <div class="control-group">
                         <label class="control-label" for="apiKey">Add Time:</label>
                         <div class="controls">
@@ -257,13 +262,16 @@
                         </div>
                     </div>
                     <hr />
+                    
+                    -->
+                    
                     <div class="control-group">
                         <div class="footerLeft">
                             <a href="#" class="updateOther">Advanced options</a>
                         </div>
                         <div class="footerRight">
-                            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                            <button class="btn btn-primary saveSettings">Save changes</button>
+                            <button class="btn closePopover">Close</button>
+                            <button class="btn btn-primary updateTaskDetail">Save changes</button>
                         </div>
                     </div>
                 </form>

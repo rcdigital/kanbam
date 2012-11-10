@@ -10,7 +10,7 @@ $client = new Redmine\Client($redmine_uri, $api_key );
 
 
 if ( $action == "getAllProjects" ) {
-	echo json_encode( $client->api('project')->all() );
+	echo json_encode( $client->api('project')->all(array('limit' => 999)) );
 } else if ( $action == "getTasksByProjectId" ) {
 	echo json_encode( $client->api('issue')->all(array('project_id' => $_REQUEST["id"], 'limit' => 'all')));
 } else if ( $action == "updateTask" ) {
@@ -18,7 +18,5 @@ if ( $action == "getAllProjects" ) {
 } else if ( $action == "getSpentTimeByProjectId" ) {
 	echo json_encode( $client->api('time_entry')->all(array('project_id' => $_REQUEST["id"], 'limit' => '999')));
 } else if ( $action == "getUsersByProject" ) {
-	echo json_encode( $client->api('membership')->all($_REQUEST["id"]));
-} else if ( $action == "getActivities" ) {
 	echo json_encode( $client->api('membership')->all($_REQUEST["id"]));
 }
