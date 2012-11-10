@@ -27,7 +27,7 @@ function KanbamView($scope) {
     $scope.changeProject = function(id) {
         $.cookie("lastProjectId", id)
         
-        $scope.tasks = [];
+        $scope.histories = [];
         $scope.currentProject.id = id;
         $scope.currentProject.memberships = undefined;
         $scope.toolObj.getTasksByProjectId(id, true);
@@ -39,7 +39,6 @@ function KanbamView($scope) {
         $scope.currentProject.id = $.cookie("lastProjectId");
         
         $scope.tool = $.cookie("tool");
-        
         
         this.start();
         
@@ -179,8 +178,8 @@ function KanbamView($scope) {
     KanbamView.prototype.mountTasks = function() {
         var cont = 0;
         var self = this;
-        for ( h in $scope.tasks ) {
-            var groupTasks = [ $scope.tasks[h].todo, $scope.tasks[h].doing, $scope.tasks[h].done ];
+        for ( h in $scope.histories ) {
+            var groupTasks = [ $scope.histories[h].todo, $scope.histories[h].doing, $scope.histories[h].done ];
             for ( t in groupTasks ) {
                 if ( groupTasks[t].length != 0 ) {
                     for ( td in groupTasks[t] ) {
@@ -298,7 +297,7 @@ function KanbamRedmine($scope) {
         $scope.appURI = "http://kanbam.dev";
         $scope.proxyURI = $scope.appURI + "/redmine.php?api_key=" + $scope.apiKey + "&redmine_uri=" + $scope.redmineURI;
         $scope.projects = [];
-        $scope.tasks = [];
+        $scope.histories = [];
         $scope.colors = ["", "red", "blue", "green"];
         $scope.tasksList = [];
         $scope.spentTimesAux = [];
@@ -560,7 +559,7 @@ function KanbamRedmine($scope) {
         
         ta = _.groupBy(newIssues, function(issue) { return issue.history_name; } );
         
-        $scope.tasks = []; i = 0;
+        $scope.histories = []; i = 0;
         for ( t in ta ) {
             t_todo = _.filter(ta[t], function(issue) { return ( issue.status_name == "TODO" ) == 1; } );
             t_doing = _.filter(ta[t], function(issue) { return ( issue.status_name == "DOING" ) == 1; } );
@@ -568,8 +567,8 @@ function KanbamRedmine($scope) {
             
             var totalEstimated = _.reduce(ta[t], function(memo, issue){ return memo + parseFloat( issue.estimated ); }, 0);
             
-            $scope.tasks.push({ name: t, id: ta[t][0].history_id, total_estimated: totalEstimated, todo: t_todo, doing: t_doing, done: t_done });
-            $scope.tasks = _.sortBy($scope.tasks, function(task){ return task.name; });
+            $scope.histories.push({ name: t, id: ta[t][0].history_id, total_estimated: totalEstimated, todo: t_todo, doing: t_doing, done: t_done });
+            $scope.histories = _.sortBy($scope.histories, function(task){ return task.name; });
             
             i++;
         }

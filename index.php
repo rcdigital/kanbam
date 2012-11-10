@@ -40,9 +40,9 @@
                         <div class="valueError">{{currentProject.variation}}%</div>
                     </div>
                     <div class="progressProject progress">
-                        <div class="bar bar-warning" style="width: {{currentProject.totalTodo}}%;" title="todo">{{currentProject.totalTodo}}%</div>
-                        <div class="bar bar-info" style="width: {{currentProject.totalDoing}}%;" title="doing">{{currentProject.totalDoing}}%</div>
-                        <div class="bar bar-success" style="width: {{currentProject.totalDone}}%;" title="done">{{currentProject.totalDone}}%</div>
+                        <div class="bar bar-warning todo" style="width: {{currentProject.totalTodo}}%;">{{currentProject.totalTodo}}%</div>
+                        <div class="bar bar-info doing" style="width: {{currentProject.totalDoing}}%;">{{currentProject.totalDoing}}%</div>
+                        <div class="bar bar-success done" style="width: {{currentProject.totalDone}}%;">{{currentProject.totalDone}}%</div>
                     </div>
                     <div class="changeProject">
                         <div class="btn-group">
@@ -82,23 +82,23 @@
                         <col class="colDone column"/>
                     </colgroup>
                     <tbody>
-                        <tr id="{{task.id}}" ng-repeat="task in tasks">
+                        <tr id="{{history.id}}" ng-repeat="history in histories">
                             <td class="labelHistory">
                                 <div class="labelHistoryBox">
-                                    {{task.name}}<br />
-                                    <span class="estimatedTime">Estimated: {{task.total_estimated}}h</span>
+                                    {{history.name}}<br />
+                                    <span class="estimatedTime">Estimated: {{history.total_estimated}}h</span>
                                 </div>
                             </td>
                             <td id="TODO" class="todo content">
-                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in task.todo">
+                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in history.todo">
                                     <div class="task">#{{post.id}}</div>
                                     <div class="assigned_to">{{post.assigned_to_name}}</div>
-                                    <div class="name">{{post.name}}</div>
+                                    <div class="name">{{post.name}}</a></div>
                                     <div class="hours">{{post.estimated}}h</div>
                                 </div>
                             </td>
                             <td id="DOING" class="doing content">
-                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in task.doing">
+                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in history.doing">
                                     <div class="task">#{{post.id}}</div>
                                     <div class="assigned_to">{{post.assigned_to_name}}</div>
                                     <div class="name">{{post.name}}</div>
@@ -106,7 +106,7 @@
                                 </div>
                             </td>
                             <td id="DONE" class="done content">
-                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in task.done">
+                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in history.done">
                                     <div class="task">#{{post.id}}</div>
                                     <div class="assigned_to">{{post.assigned_to_name}}</div>
                                     <div class="name">{{post.name}}</div>
@@ -139,10 +139,7 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a href="#">História 1</a></li>
-                                        <li><a href="#">História 2</a></li>
-                                        <li><a href="#">História 3</a></li>
-                                        <li><a href="#">História 4</a></li>
+                                        <li ng-repeat="history in histories"><a href="#">{{history.name}}</a></li>
                                     </ul>
                                 </div>
                                 <button class="btn btn-danger" type="button">Save</button>
