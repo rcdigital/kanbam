@@ -1,0 +1,96 @@
+/* Bootstrap adjusts */
+
+textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[type="datetime"]:focus, input[type="datetime-local"]:focus, input[type="date"]:focus, input[type="month"]:focus, input[type="time"]:focus, input[type="week"]:focus, input[type="number"]:focus, input[type="email"]:focus, input[type="url"]:focus, input[type="search"]:focus, input[type="tel"]:focus, input[type="color"]:focus, .uneditable-input:focus { box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(0, 0, 0, 0.2); border-color:rgba(0, 0, 0, 0.2); }
+
+/* Bootstrap adjusts */
+
+
+.main { font-family: 'Dosis', sans-serif; }
+
+.project { position: fixed; width: 100%; z-index: 99999; background-color: black; height: 50px; display: table; }
+.project .title { color: #FFF; font-size: 24px; height: 50px; vertical-align: middle; display: block; display: table-cell; margin-left: 10px; padding-left: 10px; }
+
+.project .detailRight .hoursProject { float: left; color:#FFF; width:100px; font-size: 14px; line-height: 14px; margin-top: 10px; }
+.project .detailRight .errorProject { width:36px; float: left; background-color:#666; -webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px; color:#FFF; padding-left: 6px; padding-right: 6px; margin-top: 11px; height: 28px; text-align: center; margin-right: 10px; }
+.project .detailRight .errorProject .labelError { font-size: 12px; font-weight: 400; line-height: 10px; }
+.project .detailRight .errorProject .valueError { line-height: 14px; font-weight: 600; font-size: 14px; }
+.project .detailRight { width: 600px; height: 50px; display: table-cell; }
+.project .detailRight .hoursProject .labelHours { font-weight: 600; }
+.project .detailRight .progressProject { float: left; width: 200px; height:28px; vertical-align: middle; margin-top: 11px; margin-bottom: 0px; }
+.project .detailRight .progressProject .bar { padding-top: 5px; }
+.project .detailRight .changeProject { float: left; margin-top: 10px; margin-left: 10px; }
+.project .detailRight .changeProject .btn-group .btn-label { width:150px; text-align: left; }
+.project .detailRight .changeProject .dropdown-menu { height:500px; right: 0px; overflow-y: auto; overflow-x: hidden; }
+.project .detailRight .changeProject .dropdown-menu a { width:250px; }
+
+.project .detailRight .settingsBtn { float: left; margin-top: 10px; margin-left: 6px; }
+
+.head { position: fixed; width: 100%; z-index: 9999; margin-top: 50px; }
+.head table { width: 100%; }
+.head th { font-weight: 600; background-color: #333; color: #F2F2F2; height:40px; border-left: 1px solid #666; }
+
+.colHistories { min-width: 221px; width: 221px; padding-left: 8px; border: 0px !important; }
+.column { min-width: 270px; width: 33%; }
+
+.histories { margin-top: 90px; width: 100%; float: left; }
+.histories .labelHistory { background-color: #555; color: #F2F2F2; font-size: 20px; line-height: 18px; padding-left: 10px; font-weight: 600; border-bottom: 1px solid #CCC; width: 230px; height: 100%; vertical-align: middle; }
+.histories .labelHistory .labelHistoryBox { font-weight: 600; border: 0px; width: 220px; min-width: 220px; padding-bottom: 36px; padding-top: 36px; }
+.histories .estimatedTime { font-size: 14px; font-weight: 300; color:#AAA; }
+
+.histories .content { border-bottom: 1px solid #CCC; padding-bottom: 7px; padding-right: 7px; vertical-align: top; border-left: 1px solid #CCC; }
+.histories .todo { background-color: #F2F2F2; }
+.histories .doing { background-color: #D9D9D9; }
+.histories .done { background-color: #F2F2F2; }
+
+.contentHover { background-color: #E6EFF9 !important; -moz-box-shadow: inset 0 0 5px 5px #CEE0F4; -webkit-box-shadow: inset 0 0 5px 5px #CEE0F4; box-shadow: inset 0 0 5px 5px #CEE0F4;}
+
+.post-it { cursor:move; background-color: #FFFDDA; width: 116px; border: 1px solid #B28500; margin: 7px 0 0 7px; height: 90px; float: left; padding: 3px; color: #B28500; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+.post-it .name { font-size: 13px; vertical-align: middle; display: table-cell; height: 90px; width: 116px; text-align: center; line-height: 12px; margin-top: -10px; }
+.post-it .assigned_to { position:absolute; font-size: 11px; font-weight: 800; width:114px; text-align: right; margin-top: 1px; }
+.post-it .hours { display: table-cell; float: right; font-size: 11px; font-weight: 800; text-align: right; padding: 1px 6px 1px 6px; margin-top: -15px; margin-right: -3px; min-width: 14px; }
+.post-it .task { position: absolute;  font-size: 11px; font-weight: 800; text-align: center; padding: 1px 6px 1px 6px; min-width: 14px; }
+.post-it-red { background-color: #FDF2ED; border: 1px solid #D93600; color: #D93600; }
+.post-it-blue { background-color: #F3FCFF; border: 1px solid #0066CC; color: #0066CC; }
+
+.popup { position: fixed; text-align: center; float:left; background-color: #000; height: 100%; width:100%; z-index: 99999999; display: none; }
+.popup iframe { width:80%; height:90%; border:0px; margin-top: 30px; }
+
+.menu { position: fixed; z-index:999; bottom:0px; width: 100%; height: 60px; margin-bottom: 0px;  }
+.menu .menuToggle { float: left; width:100%; height: 20px; }
+.menu .menuToggleArea { margin-left: -30px; }
+.menu .menuToggle .icon { -webkit-border-radius:4px 4px 0 0;-moz-border-radius:4px 4px 0 0;border-radius:4px 4px 0 0; float: left; margin-left:50%; width: 60px; background-color: #C00; height: 10px; background-image: url(../img/menu-actions.gif); background-position: center;  background-repeat: no-repeat; }
+.menu .menuToggle .area { background-color: #C00; float:left; width: 100%; height: 10px; }
+.menu .menuItems { background-color: #C00; float: left; width:100%; height: 40px; }
+.menu .menuItems .menuDetail { display: none; }
+.menu .menuItems .newTaskDetail { width:500px; float: left; }
+.menu .menuItems .taskHistory { display: inline; margin-left: 2px; }
+.menu .menuItems .taskHistory .dropdown-menu { right: 0; left: auto; bottom:0px; top:auto; }
+.menu .menuItems .taskHistory .dropdown-menu li a { color: #000; font-size: 16px; }
+.menu .menuItems .newHistoryDetail { width:382px; overflow: auto; float: left; }
+.menu .menuItems .left { float: left; }
+.menu .menuItems .right { float: right; }
+.menu .menuItems .newTask, .menu .menuItems .newHistory { float: left; }
+.menu .menuItems input { margin-top: 2px; float: left; margin-left: 8px; margin-right: 4px; }
+.menu .menuItems button { margin-left: 4px; }
+.menu .menuItems .btn-link { color: #600; margin-top: 4px; }
+.menu .menuItems .item { color: #FFF; font-size: 20px; float: left; margin-right: 10px; }
+.menu .menuItems .item a { float: left; color:#FFF; text-decoration: none; -webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px; padding-top: 4px; padding-bottom:6px; padding-left: 12px; padding-right: 12px; margin-top: -3px; margin-left: 6px; margin-right: 5px; }
+.menu .menuItems .item a:hover {  background-color: #600; }
+.menu .menuItems .item i { margin-top: 7px; margin-right: 4px; }
+
+.modal .btn-group > .btn:first-child { width: 260px; text-align: left; }
+.modal .title { font-size: 20px; font-weight: 600; }
+
+.help-inline { font-size: 12px; }
+
+.popoverTemplate { display: none; }
+.popover { width: 440px; z-index: 9999999; }
+.popover .control-label { width: 100px; }
+.popover .controls { margin-left: 110px; }
+.popover .addTime { float:right; margin-right:30px; }
+.popover .footerLeft { float: left; }
+.popover .footerRight { float: right; }
+.popover .updateOther { font-size: 12px; margin-top: 8px; float: left; }
+.popover .hours { text-align: right; }
+
+.loading { background-color: #C00; padding: 2px; width:80px; color:#FFF; position: fixed; z-index: 9999999999; left:50%; text-align: center; margin-left: -40px; display: none; }
