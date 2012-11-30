@@ -9,7 +9,7 @@ function KanbamRedmine($scope) {
     KanbamRedmine.prototype.startRedmine = function() {
         var self = this;
         
-        $scope.appURI = "http://" + window.location.host + window.location.pathname;
+        $scope.appURI = "//" + window.location.host + window.location.pathname;
         $scope.proxyURI = $scope.appURI + "/redmine.php?api_key=" + $scope.apiKey + "&redmine_uri=" + $scope.redmineURI;
         $scope.projects = [];
         $scope.histories = [];
