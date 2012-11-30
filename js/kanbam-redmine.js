@@ -10,7 +10,7 @@ function KanbamRedmine($scope) {
         var self = this;
         
         $scope.appURI = "//" + window.location.host + window.location.pathname;
-        $scope.proxyURI = $scope.appURI + "/redmine.php?api_key=" + $scope.apiKey + "&redmine_uri=" + $scope.redmineURI;
+        $scope.proxyURI = $scope.appURI + "redmine.php?api_key=" + $scope.apiKey + "&redmine_uri=" + $scope.redmineURI;
         $scope.projects = [];
         $scope.histories = [];
         $scope.colors = ["", "red", "blue", "green"];
@@ -333,7 +333,7 @@ function KanbamRedmine($scope) {
 
         $.ajax({
             type : 'POST',
-            url : $scope.appURI + "/redmine.php?api_key=" + $scope.apiKey + "&redmine_uri=" + $scope.redmineURI + "&action=updateTask&status=" + status + "&id=" + id + "&history=" + history,
+            url : $scope.appURI + "redmine.php?api_key=" + $scope.apiKey + "&redmine_uri=" + $scope.redmineURI + "&action=updateTask&status=" + status + "&id=" + id + "&history=" + history,
             success : function(data) {
                 kView.loadingHide();
                 
