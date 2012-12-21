@@ -125,6 +125,11 @@ class Issue extends AbstractApi
 
         return $this->put('/issues/'.$id.'.xml', $xml->asXML());
     }
+    
+    public function remove($id)
+    {
+        return $this->delete('/issues/'.$id.'.xml');
+    }
 
     /**
      * @param  int    $id

@@ -139,10 +139,10 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li ng-repeat="history in histories"><a href="#">{{history.name}}</a></li>
+                                        <li ng-repeat="history in histories"><a href="#" id="{{history.id}}">{{history.name}}</a></li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-danger" type="button">Save</button>
+                                <button class="btn btn-danger saveTask" type="button">Save</button>
                                 <button id="taskCancel" class="btn btn-link" type="button">Cancel</button>
                             </div>
                         </div>
@@ -150,7 +150,7 @@
                             <a href="#"><i class="icon-align-justify icon-white"></i> New History</a>
                             <div class="newHistoryDetail menuDetail">
                                 <input id="historyName" type="text" placeholder="History name" />
-                                <button class="btn btn-danger" type="button">Save</button>
+                                <button class="btn btn-danger saveHistory" type="button">Save</button>
                                 <button id="historyCancel" class="btn btn-link" type="button">Cancel</button>
                             </div>
                         </div>

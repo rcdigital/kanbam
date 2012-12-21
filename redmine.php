@@ -23,4 +23,10 @@ if ( $action == "getAllProjects" ) {
 	echo json_encode( $client->api('membership')->all($_REQUEST["id"]));
 }  else if ( $action == "getAllHistories" ) {
 	echo json_encode( $client->api('version')->all($_REQUEST["project_id"]));
+} else if ( $action == "addTask" ) {
+	$client->api('issue')->create( array( 'project_id' => $_REQUEST["project_id"], 'subject' => $_REQUEST["name"], 'fixed_version_id' => $_REQUEST["history_id"] ) );
+} else if ( $action == "addHistory" ) {
+    $client->api('version')->create( $_REQUEST["project_id"], array( 'name' => $_REQUEST["name"] ) );
+} else if ( $action == "removeTask" ) {
+    $client->api('issue')->remove( $_REQUEST["id"] );
 }

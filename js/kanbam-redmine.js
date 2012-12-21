@@ -317,9 +317,29 @@ function KanbamRedmine($scope) {
         kView.mountTasks();
     }
     
-    KanbamRedmine.prototype.addTask = function() {
+    KanbamRedmine.prototype.addTask = function( name, history_id ) {
+        console.log( name + " - " + history_id );
         
+        this.proxy("onAddTask", "addTask", "&name=" + name + "&history_id=" + history_id + "&project_id=" + $scope.currentProject.id, true );
     }
+    
+    KanbamRedmine.prototype.onAddTask = function() {
+        self.reload(true);
+    }
+    
+    KanbamRedmine.prototype.addHistory = function( name ) {
+        this.proxy("onAddHistory", "addHistory", "&name=" + name + "&project_id=" + $scope.currentProject.id, true );
+    }
+    
+    KanbamRedmine.prototype.onAddHistory = function() {
+        self.reload(true);
+    }
+    
+    KanbamRedmine.prototype.removeTask = function( id ) {
+        this.proxy("onRemoveTask", "removeTask", "&id=" + id, true );
+    }
+    
+    KanbamRedmine.prototype.onRemoveTask = function() {}
     
     KanbamRedmine.prototype.onUpdateTaskDetail = function() {
         kView.onUpdateTaskDetail();

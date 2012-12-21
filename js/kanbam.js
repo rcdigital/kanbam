@@ -20,6 +20,8 @@ function KanbamView($scope) {
     KanbamView.prototype.start = function() {
         var self = this;
         
+        $scope.currentHistory = 0;
+        
         if ($scope.apiKey == undefined) {
             $("#settingsModal").modal();
         } else {
@@ -48,6 +50,31 @@ function KanbamView($scope) {
                     $(".menu").stop().animate({ bottom: -40 }, 50, 'easeOutQuad' );
                 }
             }
+        });
+        
+        // Save a new task
+        $(".saveTask").click(function() {
+            if ( $("#taskName").val() == "" ) { 
+                alert("Insert a correct task name.");
+                return false;
+            }
+            
+            if ( $scope.currentHistory == 0 ) { 
+                alert("Choose a history for your task.");
+                return false;
+            }
+            
+            $scope.toolObj.addTask( $("#taskName").val(), $scope.currentHistory );
+        });
+        
+        // Save a new history
+        $(".saveHistory").click(function() {
+            if ( $("#historyName").val() == "" ) { 
+                alert("Insert a correct history name.");
+                return false;
+            }
+            
+            $scope.toolObj.addHistory( $("#historyName").val() );
         });
         
         // new task actions
@@ -230,7 +257,11 @@ function KanbamView($scope) {
                             
                             postIt.bind("mouseup", function(){
                                 if ($(this).hitTestObject($(".deleteTask"))) {
-                                    console.log("delete action");
+                                    
+                                    var id = $(this).attr("id").substring(4, $(this).attr("id").length );
+                                    
+                                    $scope.toolObj.removeTask( id );
+                                    
                                     $(this).css("margin-left", -1).css("margin-top", -1); // scroll bug fix                             
                                     self.currentPostIt.stop();
                                     $(this).hide("scale", { origin : ["bottom", "right"] }, 300);
@@ -256,6 +287,15 @@ function KanbamView($scope) {
             },
             over: function( e, ui ) { $(this).addClass("contentHover"); },
             out: function( e, ui ) { $(this).removeClass("contentHover"); }
+        });
+        
+        // Change history in add task
+        $(".taskHistory ul li a").click(function(e) {
+            e.preventDefault();
+            
+            $(".taskHistory .btn-label").html( $(this).html() );
+            
+            $scope.currentHistory = $(this).attr("id");
         });
         
         $(".loading").fadeOut("slow");
