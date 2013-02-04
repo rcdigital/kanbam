@@ -1,18 +1,13 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html data-ng-app="Kanbam" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html data-ng-app="Kanbam" class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html data-ng-app="Kanbam" class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html data-ng-app="KanbamApp" class="no-js"> <!--<![endif]-->
+<html ng-app class="no-js">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Kanb.am</title>
         <meta name="description" content="Kanbam for project management tools">
         <meta name="viewport" content="width=device-width">
-
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
         <link href='http://fonts.googleapis.com/css?family=Dosis:200,300,400,600,800' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Paprika' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
@@ -20,14 +15,13 @@
         
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body ng-controller="Kanbam">
-        <!--[if lt IE 7]>
-            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
-        <![endif]-->
-
-        <!-- Add your site or application content here -->
+    <body ng-controller="App">
+        <div class="alert alert-error">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4>Error</h4>
+            <span class="alert-message">This project don't have any members.</span>
+        </div>
         <div class="main">
-            <div class="loading">reloading...</div>
             <div class="project">
                 <div class="title">{{currentProject.name}}</div>
                 <div class="detailRight">
@@ -35,9 +29,9 @@
                         <span class="labelHours">estimated:</span> {{currentProject.totalEstimated}}h<br />
                         <span class="labelHours">executed:</span> {{currentProject.totalSpent}}h
                     </div>
-                    <div class="errorProject">
+                    <div class="errorProject {{getColorByVariation(currentProject.variation)}}">
                         <div class="labelError">variation</div>
-                        <div class="valueError">{{currentProject.variation}}%</div>
+                        <div class="valueError">{{formatVariation(currentProject.variation)}}%</div>
                     </div>
                     <div class="progressProject progress">
                         <div class="bar bar-warning todo" style="width: {{currentProject.totalTodo}}%;">{{currentProject.totalTodo}}%</div>
@@ -51,7 +45,7 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu">
-                                <li ng-repeat="project in projects" ng-switch on="project.parentName">
+                                <li ng-repeat="project in projects" ng-switch on="project.parent">
                                     <a href="#" id="{{project.id}}" ng-switch-when="" style="padding-left:12px;font-weight:600;">{{project.name}}</a>
                                     <a href="#" id="{{project.id}}" ng-switch-default style="padding-left:22px;">{{project.name}}</a>
                                 </li>
@@ -66,51 +60,60 @@
             <div class="head">
                 <table>
                     <tr>
-                        <th class="colHistories">HISTORIES</th>
+                        <th class="colStories">STORIES</th>
                         <th class="column">TODO</th>
                         <th class="column">DOING</th>
                         <th class="column">DONE</th>
                     </tr>
                 </table>
             </div>
-            <div class="histories">
+            <div class="stories">
                 <table>
                     <colgroup>
-                        <col class="colHistories"/>
+                        <col class="colStories"/>
                         <col class="colTodo column"/>
                         <col class="colDoing column"/>
                         <col class="colDone column"/>
                     </colgroup>
                     <tbody>
-                        <tr id="{{history.id}}" ng-repeat="history in histories">
-                            <td class="labelHistory">
-                                <div class="labelHistoryBox">
-                                    {{history.name}}<br />
-                                    <span class="estimatedTime">Estimated: {{history.total_estimated}}h</span>
+                        <tr id="{{story.id}}" ng-repeat="story in stories">
+                            <td class="labelStory">
+                                <div class="labelStoryBox">
+                                    {{story.name}}<br />
+                                    <span class="estimatedTime">Estimated: {{formatHour(story.total_estimated, true)}}</span>
                                 </div>
                             </td>
                             <td id="TODO" class="todo content">
-                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in history.todo">
-                                    <div class="task">#{{post.id}}</div>
-                                    <div class="assigned_to">{{post.assigned_to_name}}</div>
-                                    <div class="name">{{post.name}}</a></div>
-                                    <div class="hours">{{post.estimated}}h</div>
+                                <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.todo">
+                                    <div class="area post-it-{{formatColorPost(post.type)}}">
+                                        <div class="task">#{{post.id}}</div>
+                                        <div class="assigned_to">{{formatUserName(post.assigned_to_name)}}</div>
+                                        <div class="name">{{post.name}}</a></div>
+                                        <div class="hours">{{formatHour(post.estimated)}}</div>
+                                        <div class="spent">{{formatHour(post.spent_time)}}</div>
+                                    </div>
                                 </div>
                             </td>
                             <td id="DOING" class="doing content">
-                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in history.doing">
-                                    <div class="task">#{{post.id}}</div>
-                                    <div class="assigned_to">{{post.assigned_to_name}}</div>
-                                    <div class="name">{{post.name}}</div>
-                                    <div class="hours">{{post.estimated}}h</div>
+                                <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.doing">
+                                    <div class="area post-it-{{formatColorPost(post.type)}}">
+                                        <div class="task">#{{post.id}}</div>
+                                        <div class="assigned_to">{{formatUserName(post.assigned_to_name)}}</div>
+                                        <div class="name">{{post.name}}</div>
+                                        <div class="hours">{{formatHour(post.estimated)}}</div>
+                                        <div class="spent">{{formatHour(post.spent_time)}}</div>
+                                    </div>
                                 </div>
                             </td>
                             <td id="DONE" class="done content">
-                                <div id="post{{post.id}}" class="post-it post-it-{{post.type}}" ng-repeat="post in history.done">
-                                    <div class="task">#{{post.id}}</div>
-                                    <div class="assigned_to">{{post.assigned_to_name}}</div>
-                                    <div class="name">{{post.name}}</div>
-                                    <div class="hours">{{post.estimated}}h</div>
+                                <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.done">
+                                    <div class="area post-it-{{formatColorPost(post.type)}}">
+                                        <div class="task">#{{post.id}}</div>
+                                        <div class="assigned_to">{{formatUserName(post.assigned_to_name)}}</div>
+                                        <div class="name">{{post.name}}</div>
+                                        <div class="hours">{{formatHour(post.estimated)}}</div>
+                                        <div class="spent">{{formatHour(post.spent_time)}}</div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -128,36 +131,46 @@
                     </div>
                 </div>
                 <div class="menuItems">
-                    <div class="left">
-                        <div class="newTask item">
-                            <a href="#"><i class="icon-pencil icon-white"></i> New Task</a>
-                            <div class="newTaskDetail menuDetail">
-                                <input id="taskName" type="text" placeholder="Task name" />
-                                <div class="btn-group taskHistory">
-                                    <button class="btn btn-label btn-danger">Choice a History</button>
+                    <div class="newTask item">
+                        <a href="#" class="menuButton"><i class="icon-pencil icon-white"></i> New Task</a>
+                        <div class="newTaskDetail menuDetail">
+                            <form id="addTaskForm" action="">
+                                <input id="taskName" type="text" placeholder="Task name" name="taskName" />
+                                <input id="taskHours" class="taskHours" type="text" placeholder="0" />
+                                <div class="labelHoursNewTask">
+                                    hs
+                                </div>
+                                <div class="btn-group taskActivity combo">
+                                    <button class="btn btn-label btn-danger">Choose an Activity</button>
                                     <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li ng-repeat="history in histories"><a href="#" id="{{history.id}}">{{history.name}}</a></li>
+                                        <li ng-repeat="activity in activities"><a href="#" id="{{activity.id}}">{{activity.name}}</a></li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-danger saveTask" type="button">Save</button>
+                                <div class="btn-group taskStory combo">
+                                    <button class="btn btn-label btn-danger">Choose a Story</button>
+                                    <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li ng-repeat="story in stories"><a href="#" id="{{story.id}}">{{story.name}}</a></li>
+                                    </ul>
+                                </div>
+                                <button class="btn btn-danger saveTask" type="submit">Save</button>
                                 <button id="taskCancel" class="btn btn-link" type="button">Cancel</button>
-                            </div>
-                        </div>
-                        <div class="newHistory item">
-                            <a href="#"><i class="icon-align-justify icon-white"></i> New History</a>
-                            <div class="newHistoryDetail menuDetail">
-                                <input id="historyName" type="text" placeholder="History name" />
-                                <button class="btn btn-danger saveHistory" type="button">Save</button>
-                                <button id="historyCancel" class="btn btn-link" type="button">Cancel</button>
-                            </div>
+                            </form>
                         </div>
                     </div>
-                    <div class="right">
-                        <div class="deleteTask item">
-                            <i class="icon-trash icon-white"></i> Drop to Remove
+                    <div class="newStory item">
+                        <a href="#" class="menuButton"><i class="icon-align-justify icon-white"></i> New Story</a>
+                        <div class="newStoryDetail menuDetail">
+                            <form id="addStoryForm" action="">
+                                <input id="storyName" type="text" placeholder="Story name" />
+                                <button class="btn btn-danger saveStory" type="submit">Save</button>
+                                <button id="storyCancel" class="btn btn-link" type="button">Cancel</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -206,19 +219,19 @@
                 </div>
             </div>
             
-            <div class="popoverTemplate">
+            <div class="popupTaskDetail popover fade in"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title">Task Edit - #{{editTask.id}}</h3><div class="popover-content"><p>
                 <form class="form-horizontal">
                     <div class="control-group">
                         <label class="control-label" for="taskNameEdit">Task Name:</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="taskNameEdit" placeholder="Type your task name" value="{{updateTask.name}}" />
+                            <input type="text" class="input-xlarge" id="taskNameEdit" placeholder="Type your task name" value="{{editTask.name}}" />
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="inputEmail">Assigned To:</label>
                         <div class="controls">
                             <div class="btn-group memberships">
-                                <button class="btn btn-label">{{updateTask.assigned_to.name}}</button>
+                                <button class="btn btn-label"></button>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -231,71 +244,82 @@
                     <div class="control-group">
                         <label class="control-label" for="taskEstimatedHours">Estimated:</label>
                         <div class="controls">
-                            <input type="text" class="input-mini hours" id="taskEstimatedHours" placeholder="0" value="{{updateTask.estimated_hours}}" />
+                            <input type="text" class="input-mini hours" id="taskEstimatedHours" placeholder="0" value="{{editTask.estimated}}" />
                             <span class="help-inline">hs</span>
                         </div>
                     </div>
                     <hr />
-                    
-                    <!-- 
-                    
-                    -- The enumerations works only in 2.2 version and I havent test this feature with my current version 
                     
                     <div class="control-group">
-                        <label class="control-label" for="apiKey">Add Time:</label>
+                        <label class="control-label">Spent times:</label>
                         <div class="controls">
-                            <input type="text" class="input-mini hours" id="apiKey" placeholder="0" value="0" />
-                            <span class="help-inline">hs</span>
-                        
-                            <div class="btn-group toolOptions addTime">
-                                <button class="btn btn-label">Select a activity</button>
-                                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">Design</a></li>
-                                </ul>
-                            </div>                          
+                            <table class="spentTimes table table-bordered table-striped" ng-switch on="editTask.spent_time">
+                                <tr>
+                                    <th class="activity">Activity</th>
+                                    <th class="hours">Time</th>
+                                    <th class="action"></th>
+                                </tr>
+                                <tr id="{{spent_time.id}}" ng-repeat="spent_time in editTask.spent_time_list" >
+                                    <td>{{spent_time.activity_name}}</td>
+                                    <td>{{formatHour(spent_time.hours)}}</td>
+                                    <td><button id="{{spent_time.id}}" class="btn btn-mini btn-danger deleteSpentTime" type="button">Delete</button></td>
+                                </tr>
+                                <tr ng-switch-when="0">
+                                    <td class="noActivityInserted" colspan="3">No activity inserted</td>
+                                </tr>                              
+                            </table>
+                            
+                            <div class="formLeft">
+                                <div class="btn-group spentTimesActivities">
+                                    <button class="btn btn-mini btn-label">Select an activity</button>
+                                    <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu assignedToList">
+                                        <li ng-repeat="spentTimeActivity in spentTimeActivities"><a href="#" id="{{spentTimeActivity.id}}">{{spentTimeActivity.name}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="formLeft">
+                                <input type="text" class="spentHours input-mini hours btn-mini" placeholder="0" value="{{updateTask.estimated_hours}}" />
+                                <span class="help-inline">hs</span>
+                            </div>
+                            <div class="formLeft">
+                                <button class="btnAddSpent btn btn-mini btn-primary">Add</button>
+                            </div>
+                            
+                            <div class="errorSpentActivity">Fill the fields correctly.</div>
                         </div>
+                        
                     </div>
-                    <hr />
                     
-                    -->
+                    <hr />
                     
                     <div class="control-group">
                         <div class="footerLeft">
                             <a href="#" class="updateOther">Advanced options</a>
                         </div>
                         <div class="footerRight">
+                            <button class="btn removeTask"><i class="icon-trash"></i></button>
                             <button class="btn closePopover">Close</button>
                             <button class="btn btn-primary updateTaskDetail">Save changes</button>
                         </div>
                     </div>
                 </form>
-            </div>
+            </p></div></div></div>
         </div>
         
         
-        
-        
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-       
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/plugins.js"></script>
-        <script src="js/underscore-min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min.js"></script>
-        <script src="js/script.js"></script>
-        <script src="js/kanbam.js"></script>
-        <script src="js/kanbam-redmine.js"></script>
-
-        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-        <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
+        <script src="js/lib/angular.min.js"></script>
+        <script data-main="js/main" src="js/lib/require.js"></script>
+        <script type="text/javascript">
+            function App($scope) {
+            	require(['main'], function(main){
+                	main.onReadyToStart($scope);
+                });
+                
+                
+        	}
         </script>
     </body>
 </html>

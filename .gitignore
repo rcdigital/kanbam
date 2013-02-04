@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # OS generated files #
 ######################
 .DS_Store
@@ -12,3 +13,6 @@ Thumbs.db
 
 error_log
 access_log
+=======
+vendor
+>>>>>>> upstream/master

@@ -1,87 +1,165 @@
-var App = angular.module('KanbamApp', []);
+define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], function($, plugins, exports, bootstrap, tool, jqueryui){
+    var self;
 
-function Kanbam($scope) {
-    new KanbamView($scope).startSettings();
-}
-
-function KanbamView($scope) {
-    var currentPostIt;
-    
-    KanbamView.prototype.startSettings = function() {
-        $scope.currentProject = {totalSpent : 0, variation: 0, id : -1 };
-        $scope.apiKey = $.cookie("apiKey");
-        $scope.redmineURI = $.cookie("redmineURI");
-        $scope.currentProject.id = $.cookie("lastProjectId");
-        $scope.tool = $.cookie("tool");
+    exports.init = function($scope) {
+        var kanbam = new Kanbam($scope);
+        kanbam.startEvents();
+        kanbam.start();
         
-        this.start();
+        self = kanbam;
     }
     
-    KanbamView.prototype.start = function() {
-        var self = this;
+    var Kanbam = function($scope) {
+        this.$scope = $scope;
+        this.self = this;
+    }
+    
+    Kanbam.prototype.start = function() {
+        this.$scope.kanbam = self;
+    
+        this.currentPostIt = -1;
+        this.currentStory = 0;
+        this.currentActivity = 0;
+        this.$scope.editTask = { assigned_to_id : -1, assigned_to_name : "Select an user" };
+    
+        this.$scope.colors = ["", "red", "blue", "green", "purple", "orange", "gray"];
+        this.$scope.settings = { appURI : "//" + window.location.host + window.location.pathname };
         
-        $scope.currentHistory = 0;
+        this.getCookiesSettings();
         
-        if ($scope.apiKey == undefined) {
+        this.$scope.tool = tool;
+        this.$scope.tool.init(this.$scope, this);
+        
+        if ( this.$scope.settings.apiKey == undefined ) {
             $("#settingsModal").modal();
         } else {
-            $("#redmineURI").val( $scope.redmineURI );
-            $("#apiKey").val( $scope.apiKey );
+            $("#redmineURI").val( this.$scope.settings.redmineURI );
+            $("#apiKey").val( this.$scope.settings.apiKey );
             
-            new KanbamTool($scope).startTool();
+            this.$scope.tool.start();
         }
         
-        $(".popup").click(function() {
-            $(this).hide();
-            $scope.toolObj.reload(true);
+        $(".menu").stop().animate({ bottom: -40 }, 50, 'easeOutQuad' );
+        
+        this.$scope.formatHour = function(hour, isZero) {
+            if ( hour == 0 || hour == undefined ) {
+                if ( isZero ) {
+                    return "0h";
+                } else {
+                    return "";
+                }
+            } else {
+                return hour + "h";
+            }
+        }
+        
+        this.$scope.formatUserName = function(name) {
+            return String(name).split(" ")[0];
+        }
+        
+        this.$scope.formatColorPost = function(id) {
+            return self.getActivityColorById(id);
+        }
+        
+        this.$scope.getColorByVariation = function(variation) {
+            if ( ( variation <= 10 ) && ( variation >= 0 ) ) {
+                return "label-warning";
+            } else if ( variation < 0 ) {
+                return "label-success";
+            } else {
+                return "label-important";
+            }
+        }
+        
+        this.$scope.formatVariation = function(variation) {
+            if ( variation == null ) {
+                variation = 0;
+            }
+            
+            if ( ( variation >= 1000 ) || ( variation <= -1000 ) ) {
+               variation =  (variation / 1000).toFixed(1) + "K";
+            }
+            
+            return variation;
+        }
+    }
+    
+    Kanbam.prototype.startEvents = function() {
+        this.isMenuOpen = false;
+    
+        $(".saveSettings").click( this.saveSettings );
+         
+        $(".settingsBtn .btn").click( function() {
+            $("#settingsModal").modal();
         });
         
         $(window).mousemove(function(e) {
-            if ( e.clientY >= $(window).height() - 80 ) {
-                $(".menu").stop().animate({ bottom: 0 }, 250, 'easeOutQuad'  );
-            } else {
-                var isDropdownOpen = false;
-                $(".dropdown-menu").each(function() {
-                    if ( !$(this).is(':hidden') ) isDropdownOpen = true; 
-                    return;
-                });
-                
-                if ( !isDropdownOpen ) {
-                    $(".menu").stop().animate({ bottom: -40 }, 50, 'easeOutQuad' );
+            if ( !$(".menuItems .dropdown-menu").is(":visible") ) {
+                if (e.clientY >= $(window).height() - 150) {
+                    if (!self.isMenuOpen) {
+                        $(".menu").stop().animate({ bottom: 0 }, 250, 'easeOutQuad'  );
+                    }
+                    self.isMenuOpen = true;
+                } else {
+                    if (self.isMenuOpen) {
+                        $(".menu").stop().animate({ bottom: -40 }, 50, 'easeOutQuad' );
+                    }
+                    self.isMenuOpen = false;
                 }
             }
         });
         
-        // Save a new task
-        $(".saveTask").click(function() {
+        $("#addTaskForm").submit(function() {
             if ( $("#taskName").val() == "" ) { 
                 alert("Insert a correct task name.");
                 return false;
             }
             
-            if ( $scope.currentHistory == 0 ) { 
-                alert("Choose a history for your task.");
+            if ( isNaN( $("#taskHours").val() ) ) { 
+                alert("Insert only numbers in task hours.");
                 return false;
             }
             
-            $scope.toolObj.addTask( $("#taskName").val(), $scope.currentHistory );
-        });
-        
-        // Save a new history
-        $(".saveHistory").click(function() {
-            if ( $("#historyName").val() == "" ) { 
-                alert("Insert a correct history name.");
+            if ( self.currentActivity == 0 ) { 
+                alert("Choose a activity for your task.");
                 return false;
             }
             
-            $scope.toolObj.addHistory( $("#historyName").val() );
+            if ( self.currentStory == 0 ) { 
+                alert("Choose a story for your task.");
+                return false;
+            }
+            
+            self.$scope.tool.addTask({
+                name : $("#taskName").val(),
+                story_id : Number( self.currentStory ),
+                story_name : $(".taskStory .btn-label").html(),
+                type : self.currentActivity,
+                estimated : Number( $("#taskHours").val() )
+            });
+            
+            $("#taskName").val("");
+            $("#taskHours").val("");
+            $(".newTaskDetail #taskName").focus();
+            
+            return false;
         });
         
-        // new task actions
+        $("#addStoryForm").submit(function() {
+            if ( $("#storyName").val() == "" ) { 
+                alert("Insert a correct story name.");
+                return false;
+            }
+            
+            self.$scope.tool.addStory( $("#storyName").val() );
+            
+            $("#storyName").val("");
+            
+            return false;
+        });
+        
         $(".newTask a").click(function(e) {
             e.preventDefault();
-            
-            $(this).attr("style", "pointer-events: none;");
             
             $(".menuDetail").hide("fast");
             $(".menu .menuItems .item a").removeAttr("style");
@@ -89,6 +167,8 @@ function KanbamView($scope) {
             $(".newTaskDetail").css("overflow", "auto").show("fast", function() {
                 $(this).css("overflow", "visible");
             });
+            
+            $(this).attr("style", "pointer-events: none;");
             
             $(".newTaskDetail #taskName").focus();
         });
@@ -98,55 +178,145 @@ function KanbamView($scope) {
             $(".newTask a").removeAttr("style");
         });
         
-        // new history actions
-        $(".newHistory a").click(function(e) {
-        
+        $(".newStory a").click(function(e) {
             e.preventDefault();
             
             $(".menuDetail").hide("fast");
             $(".menu .menuItems .item a").removeAttr("style");
             
-            $(".newHistoryDetail").css("overflow", "auto").show("fast", function() {
+            $(".newStoryDetail").css("overflow", "auto").show("fast", function() {
                 $(this).css("overflow", "visible");
             });
             
             $(this).attr("style", "pointer-events: none;");
-            $(".newHistoryDetail #historyName").focus();
+            
+            $(".newStoryDetail #storyName").focus();
         });
         
-        $(".newHistoryDetail #historyCancel").click(function() {
-            $(".newHistoryDetail").hide("fast");
-            $(".newHistory a").removeAttr("style");
+        $(".newStoryDetail #storyCancel").click(function() {
+            $(".newStoryDetail").hide("fast");
+            $(".newStory a").removeAttr("style");
         });
-        
-        // Drop outside window
-        document.onmouseup = function(e){
-            if ( ( e.clientX > this.documentElement.clientWidth ) || ( e.clientY > this.documentElement.clientHeight ) ) {
-                if (self.currentPostIt.hitTestObject($(".deleteTask"))) {
-                    self.currentPostIt.mouseup();
-                }
-            }
-        }
         
         $(".settingsBtn .btn").click( function() {
             $("#settingsModal").modal();
         });
         
-        //save settings
-        $(".saveSettings").click( this.saveSettings );
-    }
-    
-    $scope.changeProject = function(id) {
-        $.cookie("lastProjectId", id)
+        $(".popupTaskDetail .btnAddSpent").click(function(e) {
+            e.preventDefault();
+            
+            self.addSpentTime();
+        });
         
-        $scope.histories = [];
-        $scope.currentProject.id = id;
-        $scope.currentProject.memberships = undefined;
-        $scope.toolObj.getTasksByProjectId(id, true);
+        $(".popup").click(function() {
+            $(this).hide();
+            $(".popupTaskDetail").fadeOut("fast");
+            self.$scope.tool.reload();
+        });
     }
     
-    KanbamView.prototype.saveSettings = function() {
-        var self = this;
+    Kanbam.prototype.projectsEvents = function() {
+        $(".changeProject ul li a").click(function(e) {
+            e.preventDefault();
+            self.$scope.tool.changeProject( $(this).attr("id") );
+        });
+        
+        $(".taskActivity ul li a").click(function(e) {
+            e.preventDefault();
+            
+            $(".taskActivity .btn-label").html( $(this).html() );
+            
+            self.currentActivity = $(this).attr("id");
+        });
+    }
+    
+    Kanbam.prototype.tasksEvents = function() {
+        $(".content").droppable({
+            accept: ".post-it",
+            drop: function( e, ui ) {
+                var dragArea = $(this);
+                var postIt = $(ui.draggable);
+                var postItId = postIt.attr("id").split("post")[1];
+                var status = dragArea.attr("id");
+                
+                dragArea.append(postIt);
+                postIt.attr("style", "position:relative;");
+                dragArea.removeClass("contentHover");
+                
+                self.$scope.tool.changeStatusTask({
+                    id : postItId,
+                    status : status,
+                    story : dragArea.parent().attr("id")
+                });
+                
+                if ( status == "DONE" ) {
+                    self.showEditTask(postItId);
+                } else {
+                    self.hideEditTask();
+                }
+                
+                self.fixStoryCell();
+            },
+            over: function( e, ui ) { $(this).addClass("contentHover"); },
+            out: function( e, ui ) { $(this).removeClass("contentHover"); }
+        });
+        
+        $(".taskStory ul li a").click(function(e) {
+            e.preventDefault();
+            
+            $(".taskStory .btn-label").html( $(this).html() );
+            
+            self.currentStory = $(this).attr("id");
+        });
+    }
+    
+    Kanbam.prototype.editEvents = function() {
+        $(".popupTaskDetail .closePopover").click( function(e) { 
+            e.preventDefault();
+            self.hideEditTask(e);
+        });
+        
+        $(".popupTaskDetail .removeTask").click( function(e) {
+            e.preventDefault();
+            
+            $(".popupTaskDetail").fadeOut("fast"); 
+            $('#post' + self.$scope.editTask.id).slideUp('fast');
+            self.$scope.tool.removeTask( self.$scope.editTask.id );
+        });
+        
+        $(".popupTaskDetail .updateTaskDetail").click( function(e) {
+            e.preventDefault();
+            self.updateTaskDetail( self.$scope.editTask.id ); 
+        });
+        
+        $(".popupTaskDetail .memberships ul li a").click(function(e) {
+            e.preventDefault();
+            
+            self.$scope.editTask.assigned_to_id = $(this).attr("id");
+            self.$scope.editTask.assigned_to_name = $(this).html();
+            $(".popupTaskDetail .memberships .btn-label").html( $(this).html() );
+        });
+        
+        $(".popupTaskDetail .spentTimesActivities ul li a").click(function(e) {
+            e.preventDefault();
+            
+            self.$scope.editTask.spent_time_activity_id = $(this).attr("id");
+            self.$scope.editTask.spent_time_activity_name = $(this).html();
+            $(".popupTaskDetail .spentTimesActivities .btn-label").html( $(this).html() );
+        });
+        
+        this.spentTimeEvents();
+    }
+    
+    Kanbam.prototype.spentTimeEvents = function() {
+        $(".popupTaskDetail .deleteSpentTime").click(function(e){
+            e.preventDefault();
+            
+            self.$scope.tool.removeSpentTime( $(this).attr("id") );
+        });
+    }
+    
+    Kanbam.prototype.saveSettings = function() {
         var redmineURI = $("#redmineURI");
         var apiKey = $("#apiKey");
     
@@ -170,202 +340,158 @@ function KanbamView($scope) {
             apiKey.parent().find(".help-inline").slideUp("fast");
         }
         
-        $scope.apiKey = apiKey.val();
-        $scope.redmineURI = redmineURI.val();
-        $scope.tool = "redmine";
+        self.$scope.settings.apiKey     = apiKey.val();
+        self.$scope.settings.redmineURI = redmineURI.val();
+        self.$scope.settings.tool       = "redmine";
         
-        $.cookie("apiKey", $scope.apiKey);
-        $.cookie("redmineURI", $scope.redmineURI);
-        $.cookie("tool", $scope.tool);
+        $.cookie("apiKey", self.$scope.settings.apiKey);
+        $.cookie("redmineURI", self.$scope.settings.redmineURI);
+        $.cookie("tool", self.$scope.settings.tool);
         
         $("#settingsModal").modal("hide");
         
-        new KanbamTool($scope).startTool();
+        self.$scope.tool.start();
     }
     
-    KanbamView.prototype.mountTasks = function() {
-        var cont = 0;
-        var self = this;
+    Kanbam.prototype.addSpentTime = function() {
+        var spentHours = $(".popupTaskDetail .spentHours");
+    
+        if ( spentHours.val() == "" ) {
+            $(".errorSpentActivity").show("fast");
+            return false;
+        } else {
+            
+        }
         
-        for (h in $scope.histories) {
-            if ($scope.histories[h].todo != undefined) {
-                var groupTasks = [$scope.histories[h].todo, $scope.histories[h].doing, $scope.histories[h].done];
-                
-                for (t in groupTasks) {
-                    if (groupTasks[t].length != 0) {
-                        for (td in groupTasks[t]) {
-                            var postIt = $( "#post" + (groupTasks[t][td].id) );
-                            
-                            cont++;
-                            postIt.fadeOut(0).delay(( 0.02 * cont * 1000 )).fadeIn( 500 );
-                            
-                            postIt.dblclick(function() {
-                                var openTaskId = $(this).attr("id").substring(4, $(this).attr("id").length);
-                                var openTaskDetail = _.find( $scope.tasksList, function( obj ){ return obj.id == openTaskId } );
-   
-                                self.createPopover( $(this) );    
-                                
-                                $scope.toolObj.getUsersByProject( openTaskDetail.project.id );
-                                
-                                $scope.updateTask = {};
-                                $scope.updateTask.id = openTaskId;
-                                $scope.updateTask.name = openTaskDetail.subject;
-                                $scope.updateTask.estimated_hours = openTaskDetail.estimated_hours;
-                                $scope.updateTask.assigned_to = {};
-                                
-                                if (openTaskDetail.assigned_to == undefined) {
-                                    $scope.updateTask.assigned_to.id = -1;
-                                    $scope.updateTask.assigned_to.name = "Select a user";
-                                } else {
-                                    $scope.updateTask.assigned_to = openTaskDetail.assigned_to;
-                                }
-                                
-                                self.changeAssignedTo( $scope.updateTask.assigned_to.id, $scope.updateTask.assigned_to.name );
-                                
-                                $(".popover #taskNameEdit").val( $scope.updateTask.name );
-                                $(".popover #taskEstimatedHours").val( $scope.updateTask.estimated_hours );
-                                
-                                $(".popover .closePopover").click( function(e) { 
-                                    e.preventDefault();
-                                    
-                                    $(".popover").remove();
-                                });
-                                
-                                $(".popover .updateTaskDetail").click( function() { s
-                                    self.updateTaskDetail( openTaskId ); 
-                                });
-
-                                $scope.$apply();
-                               
-                            });
-                            
-                            postIt.draggable({
-                                revert: "invalid", 
-                                containment: "document", 
-                                cursor: "move", 
-                                zIndex: 1000, 
-                                drag : function(e, ui) {
-                                    self.currentPostIt = $(this);
-                                
-                                    if ($(this).hitTestObject($(".deleteTask"))) {
-                                        $(this).fadeTo(0, .5);
-                                    } else {
-                                        $(this).fadeTo(0, 1);
-                                    }
-                                }
-                            });
-                            
-                            postIt.bind("mouseup", function(){
-                                if ($(this).hitTestObject($(".deleteTask"))) {
-                                    
-                                    var id = $(this).attr("id").substring(4, $(this).attr("id").length );
-                                    
-                                    $scope.toolObj.removeTask( id );
-                                    
-                                    $(this).css("margin-left", -1).css("margin-top", -1); // scroll bug fix                             
-                                    self.currentPostIt.stop();
-                                    $(this).hide("scale", { origin : ["bottom", "right"] }, 300);
-                                }
-                            });
+        if ( self.$scope.editTask.spent_time_activity_name == undefined ) {
+            $(".errorSpentActivity").show("fast");
+            return false;
+        } else {
+            spentHours.parent().parent().removeClass("error");
+        }
+        
+        $(".errorSpentActivity").hide("fast");
+    
+        self.$scope.tool.addSpentTime({
+            issueId : self.$scope.editTask.id,
+            hours : spentHours.val(),
+            activityId : self.$scope.editTask.spent_time_activity_id,
+            activityName : self.$scope.editTask.spent_time_activity_name
+        });
+    }
+    
+    Kanbam.prototype.renderTasks = function() {
+        for (h in this.$scope.stories) {
+            var groupColumns = [
+                this.$scope.stories[h].todo, 
+                this.$scope.stories[h].doing, 
+                this.$scope.stories[h].done
+            ];
+            
+            for (gc in groupColumns) {
+                for (t in groupColumns[gc]) {
+                    var postIt = $( "#post" + (groupColumns[gc][t].id) );
+                    
+                    postIt.bind('dblclick', this.doubleClickPostIt);
+                    
+                    postIt.draggable({
+                        revert: "invalid", 
+                        containment: "document", 
+                        cursor: "move", 
+                        zIndex: 1000, 
+                        drag : function(e, ui) {
+                            this.currentPostIt = $(this);
                         }
-                    }
-                }
+                    });
+                }    
             }
         }
         
-        $(".content").droppable({
-            accept: ".post-it",
-            drop: function( e, ui ) {
-                var dragArea = $(this);
-                var postIt = $(ui.draggable);
-                
-                dragArea.append(postIt);
-                postIt.attr("style", "position:relative;");
-                dragArea.removeClass("contentHover");
-                
-                new KanbamRedmine($scope).changeStatus( dragArea.attr("id"), postIt.attr("id").substring(4, postIt.attr("id").length), dragArea.parent().attr("id") );
-            },
-            over: function( e, ui ) { $(this).addClass("contentHover"); },
-            out: function( e, ui ) { $(this).removeClass("contentHover"); }
-        });
-        
-        // Change history in add task
-        $(".taskHistory ul li a").click(function(e) {
-            e.preventDefault();
-            
-            $(".taskHistory .btn-label").html( $(this).html() );
-            
-            $scope.currentHistory = $(this).attr("id");
-        });
-        
-        $(".loading").fadeOut("slow");
+        this.fixStoryCell();
+        this.tasksEvents();
     }
     
-    KanbamView.prototype.createPopover = function(obj) {
-        var taskId =  obj.attr("id").substring(4, obj.attr("id").length);
+    Kanbam.prototype.doubleClickPostIt = function(e) {
+        self.onUpdateData();
+        self.showEditTask(e.currentTarget.id.split("post")[1]);
+    }
+    
+    Kanbam.prototype.showEditTask = function(id) {
+        var task = _.find( self.$scope.tasks, function(task){ return task.id == id } );
+                
+        self.$scope.editTask = task;
         
-        obj.popover({ title : "Task Edit - #" + taskId , placement : "bottom", trigger : "manual", content : $(".popoverTemplate").html() });
-        obj.popover("show");
+        if (self.$scope.editTask.assigned_to_name == "") {
+            $(".popupTaskDetail .memberships .btn-label").html( "Select an user" );
+        } else {
+            $(".popupTaskDetail .memberships .btn-label").html( self.$scope.editTask.assigned_to_name );
+        }
         
-        $(".popover").bind("clickoutside", function() {
-            $(this).remove();   
-        });
+        self.onUpdateData();
+    
+        $(".popupTaskDetail").show();
+        
+        $(".popupTaskDetail .spentTimesActivities .btn-label").html( "Select an activity" );
+        
+        $(".popupTaskDetail .spentHours").val("");
+        $(".popupTaskDetail .spentHours").focus();
         
         $(".updateOther").click(function(e) {
             e.preventDefault();
             
-            $(".popup iframe").attr("src", $scope.redmineURI + "issues/" + taskId);
-            $(".popup").fadeIn("fast"); 
-            $(".popover").remove();
+            $(".popup iframe").attr("src", self.$scope.settings.redmineURI + "issues/" + id);
+            $(".popup").fadeIn("fast");
         });
-    }
-    
-    KanbamView.prototype.mountProjects = function() {
-        $(".changeProject ul li a").click(function(e) {
-            e.preventDefault();
-            
-            $scope.changeProject( $(this).attr("id") );
-        });
-    }
-    
-    KanbamView.prototype.mountUsers = function() {
-        $(".popover .memberships ul li a").click(function(e) {
-            e.preventDefault();
-            
-            $scope.updateTask.assigned_to.id = $(this).attr("id");
-            $scope.updateTask.assigned_to.name = $(this).html();
-        });
-    }
-    
-    KanbamView.prototype.onUpdateTaskDetail = function() {
-        $(".popover").remove(); 
         
-        $scope.toolObj.reload(true);
+        this.movePositionPopover(id);
+        
+        this.editEvents();
     }
-
-    KanbamView.prototype.onUpdateTaskDetail = function() {    
-        $(".popover .assignedToList").html($(".popoverTemplate .assignedToList").html());
-            
-        $(".popover .dropdown-menu a").click(function(e){
-            e.preventDefault();
-            $scope.toolObj.changeAssignedTo( $(e.target).attr("id"), $(e.target).html() );
+    
+    Kanbam.prototype.hideEditTask = function(e) {
+        $(".popupTaskDetail").fadeOut("fast");
+    }
+    
+    Kanbam.prototype.movePositionPopover = function( id ) {
+        var pop = $(".popupTaskDetail");
+        var post = $("#post" + id);
+        var stories = $(".stories");
+        var posXPop, posYPop = 0;
+        var headHeight = $(".head").height() + $(".project").height();
+        
+        if ( $(window).width() - ( post.offset().left + post.width() ) > pop.width() ) {
+            posXPop = post.offset().left + post.width() + 10;
+            pop.removeClass("left");
+            pop.addClass("right");
+        } else {
+            posXPop = post.offset().left - pop.width() - 10;
+            pop.removeClass("right");
+            pop.addClass("left");
+        }
+        
+        posYPop = post.offset().top - ( pop.height() / 2 ) + ( post.height() / 2 );
+        
+        if ( posYPop < headHeight ) {
+            posYPop = headHeight + 5;
+        }
+        
+        if ( posYPop > $(document).height() - pop.height() - 60 - 10 ) {
+            posYPop = $(document).height() - pop.height() - 60 - 10;
+        }
+        
+        pop.offset({ 
+            top : posYPop,
+            left : posXPop
         });
+        
+        $(".popupTaskDetail .arrow").offset({
+            top : post.offset().top + ( post.height() / 2 ) - 10
+        });
+        
+        $('html, body').animate({ scrollTop: pop.offset().top - headHeight - 10 }, 300);
     }
     
-    KanbamView.prototype.changeAssignedTo = function(id, name) {
-        $scope.updateTask.assigned_to.id = id;
-        $(".popover .memberships .btn-label").html( name );
-    }
-    
-    KanbamView.prototype.loadingShow = function() {
-        $(".loading").fadeIn("slow");
-    }
-    
-    KanbamView.prototype.loadingHide = function() {
-        $(".loading").fadeOut("slow");
-    }
-    
-    KanbamView.prototype.updateTaskDetail = function( id ) {
+    Kanbam.prototype.updateTaskDetail = function( id ) {
         if ( $(".popover #taskNameEdit").val().trim() == "" ) {
             $(".popover #taskNameEdit").parent().parent().addClass("error");
             
@@ -385,17 +511,43 @@ function KanbamView($scope) {
             $(".popover #taskEstimatedHours").parent().parent().removeClass("error");
         }
         
-        $scope.toolObj.proxy("onUpdateTaskDetail", "updateTaskDetail", "&id=" + id + "&subject=" + $(".popover #taskNameEdit").val() + "&estimated_hours=" + $(".popover #taskEstimatedHours").val() + "&assigned_to_id=" + $scope.updateTask.assigned_to.id, true );
+        $(".popover").slideUp("fast");
+        
+        self.$scope.tool.updateTask({
+            id : id, 
+            name : $(".popover #taskNameEdit").val(), 
+            estimated : Number( $(".popover #taskEstimatedHours").val() ),
+            assigned_to_id : self.$scope.editTask.assigned_to_id, 
+            assigned_to_name : self.$scope.editTask.assigned_to_name 
+        });
     }
-}
-
-function KanbamTool($scope) {
-    KanbamTool.prototype.startTool = function() {
-        if ($scope.tool == "redmine") {
-            $scope.toolObj = new KanbamRedmine($scope);
-            $scope.toolObj.startRedmine();
+    
+    Kanbam.prototype.onUpdateData = function() {
+        this.$scope.$apply();
+    }
+    
+    Kanbam.prototype.showError = function(message) {
+        $(".alert").fadeIn("fast");
+        $(".alert-message").html( message );
+    }
+    
+    Kanbam.prototype.getCookiesSettings = function() {
+        this.$scope.settings.apiKey     = $.cookie("apiKey");
+        this.$scope.settings.redmineURI = $.cookie("redmineURI");
+        this.$scope.settings.tool       = $.cookie("tool");
+        
+        this.$scope.currentProject = { id : $.cookie("lastProjectId"), name : $.cookie("lastProjectName") };
+    }
+    
+    Kanbam.prototype.getActivityColorById = function(id) {
+        for (i = 0; i < this.$scope.activities.length; i++) {
+            if (this.$scope.activities[ i ].id == id) {
+                return this.$scope.colors[ i ];
+            }
         }
     }
-}
-
-Kanbam.$inject = ['$scope'];
+    
+    Kanbam.prototype.fixStoryCell = function() {
+        $(".content").attr("style", "width:" + parseInt( ( $(window).width() - $(".labelStory").width() ) / 3 ) + "px !important" )
+    }
+});
