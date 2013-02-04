@@ -9,6 +9,10 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+fabfile.py
+fabfile.pyc
+user.py
+user.pyc
 
 
 error_log
