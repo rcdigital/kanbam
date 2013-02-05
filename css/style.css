@@ -39,7 +39,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 .stories .labelStory .labelStoryBox { font-weight: 600; border: 0px; width: 220px; min-width: 220px; padding-bottom: 36px; padding-top: 36px; margin-left: 10px; }
 .stories .estimatedTime { font-size: 14px; font-weight: 300; color:#AAA; }
 
-.stories .content { border-bottom: 1px solid #CCC; vertical-align: top; border-left: 1px solid #CCC; }
+.stories .content { border-bottom: 1px solid #CCC; vertical-align: top; border-left: 1px solid #CCC; min-width: 270px; }
 .stories .todo { background-color: #F2F2F2; }
 .stories .doing { background-color: #D9D9D9; }
 .stories .done { background-color: #F2F2F2; }
