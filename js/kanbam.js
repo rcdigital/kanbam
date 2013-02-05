@@ -213,6 +213,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             $(".popupTaskDetail").fadeOut("fast");
             self.$scope.tool.reload();
         });
+        
+        $(window).resize(function() {
+            self.fixStoryCell();
+        });
     }
     
     Kanbam.prototype.projectsEvents = function() {
