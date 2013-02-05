@@ -255,6 +255,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             }
         }
         
+        this.$scope.currentProject.totalSpent = Math.round( this.$scope.currentProject.totalSpent );
+        
         this.updateEstimatedBar();
         this.kanbam.onUpdateData();
         this.kanbam.spentTimeEvents();
