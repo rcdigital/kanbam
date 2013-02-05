@@ -521,6 +521,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             url : this.proxyURI + "&rnd=" + new Date().getTime(),
             data : e,
             success : function(data) {
+                console.log(data);
                 if ( callback != undefined ) {
                     $.proxy(callback, self)(
                         jQuery.parseJSON(data)
