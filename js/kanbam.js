@@ -217,6 +217,20 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         $(window).resize(function() {
             self.fixStoryCell();
         });
+        
+        $(".searchValue").keyup(function() {
+            self.search( $(this).val() ); 
+        });
+        
+        $(".searchBtn").click(function() {
+            $(".searchBox").attr("style", "margin-top:-60px");
+            $(".searchBox").animate({ marginTop: 0 }, 300);
+            $(".searchValue").select();
+        });
+        
+        $(".closeBtn").click(function() {
+            $(".searchBox").animate({ marginTop: -60 }, 150);
+        });
     }
     
     Kanbam.prototype.projectsEvents = function() {
@@ -277,7 +291,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     Kanbam.prototype.editEvents = function() {
         $(".popupTaskDetail .closePopover").click( function(e) { 
             e.preventDefault();
-            self.hideEditTask(e);
+            self.hideEditTask();
         });
         
         $(".popupTaskDetail .removeTask").click( function(e) {
@@ -452,7 +466,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         this.editEvents();
     }
     
-    Kanbam.prototype.hideEditTask = function(e) {
+    Kanbam.prototype.hideEditTask = function() {
         $(".popupTaskDetail").fadeOut("fast");
     }
     
@@ -524,6 +538,33 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             assigned_to_id : self.$scope.editTask.assigned_to_id, 
             assigned_to_name : self.$scope.editTask.assigned_to_name 
         });
+    }
+    
+    Kanbam.prototype.search = function( keyword ) {
+        if ( keyword.substring(0, 1) == "#" ) {
+            var id = keyword.substring(1, keyword.length);
+            var headHeight = $(".head").height() + $(".project").height();
+        
+            $(".post-it").hide();
+            $("#post" + id).show();
+            
+            this.hideEditTask();
+            this.showEditTask( id );
+            
+            $(".searchValue").select();
+            
+            $('html, body').animate({ scrollTop: $(".popupTaskDetail").offset().top - headHeight - 10 }, 300);
+        } else {
+            this.hideEditTask();
+            
+            for ( var i = 0; i < this.$scope.tasks.length; i++ ) {
+                if ( this.$scope.tasks[ i ].name.toLowerCase().indexOf( keyword.toLowerCase() ) < 0 ) {
+                    $("#post" + this.$scope.tasks[ i ].id).hide();
+                } else {
+                    $("#post" + this.$scope.tasks[ i ].id).show();
+                }
+            }
+        }
     }
     
     Kanbam.prototype.onUpdateData = function() {

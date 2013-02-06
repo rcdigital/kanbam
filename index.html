@@ -21,6 +21,11 @@
             <h4>Error</h4>
             <span class="alert-message">This project don't have any members.</span>
         </div>
+        <div class="searchBox">
+            <form class="form-horizontal">
+                <input type="text" placeholder="Type your keyword" class="searchValue" /><button class="btn btn-primary closeBtn" type="button"><i class="icon-remove icon-white"></i></button>
+            </form>
+        </div>
         <div class="main">
             <div class="project">
                 <div class="title">{{currentProject.name}}</div>
@@ -54,6 +59,9 @@
                     </div>
                     <div class="settingsBtn">
                         <button class="btn btn-inverse" type="button"><i class="icon-wrench icon-white"></i></button>
+                    </div>
+                    <div class="searchBtn">
+                        <button class="btn btn-inverse" type="button"><i class="icon-search icon-white"></i></button>
                     </div>
                 </div>
             </div>
