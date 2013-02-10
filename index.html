@@ -6,14 +6,14 @@
         <title>Kanb.am</title>
         <meta name="description" content="Kanbam for project management tools">
         <meta name="viewport" content="width=device-width">
-        <link href='http://fonts.googleapis.com/css?family=Dosis:200,300,400,600,800' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,700italic,400,300,700' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Paprika' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="css/bootstrap.min.css">
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/style.css" >
         
-        <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="js/lib/modernizr-2.6.2.min.js"></script>
     </head>
     <body ng-controller="App">
         <div class="alert alert-error">
@@ -28,40 +28,49 @@
         </div>
         <div class="main">
             <div class="project">
-                <div class="title">{{currentProject.name}}</div>
-                <div class="detailRight">
-                    <div class="hoursProject">
-                        <span class="labelHours">estimated:</span> {{currentProject.totalEstimated}}h<br />
-                        <span class="labelHours">executed:</span> {{currentProject.totalSpent}}h
-                    </div>
-                    <div class="errorProject {{getColorByVariation(currentProject.variation)}}">
-                        <div class="labelError">variation</div>
-                        <div class="valueError">{{formatVariation(currentProject.variation)}}%</div>
-                    </div>
-                    <div class="progressProject progress">
-                        <div class="bar bar-warning todo" style="width: {{currentProject.totalTodo}}%;">{{currentProject.totalTodo}}%</div>
-                        <div class="bar bar-info doing" style="width: {{currentProject.totalDoing}}%;">{{currentProject.totalDoing}}%</div>
-                        <div class="bar bar-success done" style="width: {{currentProject.totalDone}}%;">{{currentProject.totalDone}}%</div>
-                    </div>
-                    <div class="changeProject">
-                        <div class="btn-group">
-                            <button class="btn btn-label btn-inverse">My Projects</button>
-                            <button class="btn btn-inverse dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li ng-repeat="project in projects" ng-switch on="project.parent">
-                                    <a href="#" id="{{project.id}}" ng-switch-when="" style="padding-left:12px;font-weight:600;">{{project.name}}</a>
-                                    <a href="#" id="{{project.id}}" ng-switch-default style="padding-left:22px;">{{project.name}}</a>
-                                </li>
-                            </ul>
+                <div class="project-title">{{currentProject.name}}</div>
+                <div class="project-right">
+                    <div class="project-title-mask"><img src="img/mask-titulo.png" /></div>
+                    <div class="project-right-content">
+                        <div class="project-indicator input">
+                            <span class="project-indicator-label">ESTIMATED</span> <br />
+                            <span class="project-indicator-value">{{currentProject.totalEstimated}}h</span>
                         </div>
-                    </div>
-                    <div class="settingsBtn">
-                        <button class="btn btn-inverse" type="button"><i class="icon-wrench icon-white"></i></button>
-                    </div>
-                    <div class="searchBtn">
-                        <button class="btn btn-inverse" type="button"><i class="icon-search icon-white"></i></button>
+                        <div class="project-indicator input">
+                            <span class="project-indicator-label">EXECUTED</span> <br />
+                            <span class="project-indicator-value">{{currentProject.totalSpent}}h</span>
+                        </div>
+                        <div class="project-indicator input {{getColorByVariation(currentProject.variation)}}">
+                            <span class="project-indicator-label">VARIATION</span> <br />
+                            <span class="project-indicator-value">{{formatVariation(currentProject.variation)}}%</span>
+                        </div>
+                        <div class="project-progress input">
+                            <div class="progress">
+                                <div class="project-bar project-bar-todo" style="width: {{currentProject.totalTodo}}%;">{{currentProject.totalTodo}}%</div>
+                                <div class="project-bar project-bar-doing" style="width: {{currentProject.totalDoing}}%;">{{currentProject.totalDoing}}%</div>
+                                <div class="project-bar project-bar-done" style="width: {{currentProject.totalDone}}%;">{{currentProject.totalDone}}%</div>
+                            </div>
+                        </div>
+                        <div class="project-dropdown">
+                            <div class="btn-group">
+                                <button class="btn button dropdown-toggle btn-inverse" data-toggle="dropdown">
+                                    PROJECTS
+                                    <i class="icon icon-project"></i>
+                                </button>
+                                <ul class="project-list dropdown-menu">
+                                    <li ng-repeat="project in projects" ng-switch on="project.parent">
+                                        <a href="#" id="{{project.id}}" ng-switch-when="" style="padding-left:12px;font-weight:600;">{{project.name}}</a>
+                                        <a href="#" id="{{project.id}}" ng-switch-default style="padding-left:22px;">{{project.name}}</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="settings-btn">
+                            <button class="btn button" type="button"><i class="icon icon-settings"></i></button>
+                        </div>
+                        <div class="search-btn">
+                            <button class="btn button" type="button"><i class="icon icon-search"></i></button>
+                        </div>
                     </div>
                 </div>
             </div>

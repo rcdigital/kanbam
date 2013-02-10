@@ -1,7 +1,7 @@
 require.config({ 
 	paths: { 
-		jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min',
-		jqueryui: '//ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min',
+		jquery: 'lib/jquery-1.9.0.min',
+		jqueryui: 'lib/jquery-ui-1.10.0.custom.min',
 		bootstrap: 'lib/bootstrap.min',
 		underscore: 'lib/underscore-min',
 		plugins: 'lib/plugins'

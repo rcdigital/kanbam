@@ -63,11 +63,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         
         this.$scope.getColorByVariation = function(variation) {
             if ( ( variation <= 10 ) && ( variation >= 0 ) ) {
-                return "label-warning";
+                return "indicator-attention";
             } else if ( variation < 0 ) {
-                return "label-success";
+                return "indicator-success";
             } else {
-                return "label-important";
+                return "indicator-error";
             }
         }
         
@@ -89,7 +89,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     
         $(".saveSettings").click( this.saveSettings );
          
-        $(".settingsBtn .btn").click( function() {
+        $(".settings-btn").click( function() {
             $("#settingsModal").modal();
         });
         
@@ -198,7 +198,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             $(".newStory a").removeAttr("style");
         });
         
-        $(".settingsBtn .btn").click( function() {
+        $(".settings-btn").click( function() {
             $("#settingsModal").modal();
         });
         
@@ -222,7 +222,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             self.search( $(this).val() ); 
         });
         
-        $(".searchBtn").click(function() {
+        $(".search-btn").click(function() {
             $(".searchBox").attr("style", "margin-top:-60px");
             $(".searchBox").animate({ marginTop: 0 }, 300);
             $(".searchValue").select();
@@ -231,10 +231,14 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         $(".closeBtn").click(function() {
             $(".searchBox").animate({ marginTop: -60 }, 150);
         });
+        
+        $(".project-dropdown-btn").click(function() {
+            $(".project-list").fadeIn();
+        })
     }
     
     Kanbam.prototype.projectsEvents = function() {
-        $(".changeProject ul li a").click(function(e) {
+        $(".project-list a").click(function(e) {
             e.preventDefault();
             self.$scope.tool.changeProject( $(this).attr("id") );
         });
@@ -246,6 +250,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             
             self.currentActivity = $(this).attr("id");
         });
+        
+        $(".project-list").offset().right = $(".project-dropdown-btn").offset().right;
+        
+        
+        $(".project-list").offset().top = $(".project-dropdown-btn").offset().top + $(".project-dropdown-btn").height();
     }
     
     Kanbam.prototype.tasksEvents = function() {
