@@ -19,7 +19,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             "&redmine_uri=" + this.$scope.settings.redmineURI;
         
         this.reloadCount++;
-        this.allStories = [];
         
         this.loadActivities();
         this.loadSpentTimeActivities();
@@ -88,8 +87,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             this.$scope.currentProject = lastProject;
         }
         
-        console.log("projects")
-        
         this.loadTasksByProjectId(this.$scope.currentProject.id);
         this.loadUsersByProjectId(this.$scope.currentProject.id);
         
@@ -116,8 +113,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         } else {
             this.kanbam.showError("No members registered for this project.");
         }
-        
-        console.log("users")
     }
     
     Redmine.prototype.getProjectById = function(id) {
@@ -150,8 +145,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     
     Redmine.prototype.onLoadTasksByProjectId = function(data) {
         this.$scope.tasks = [];
-        
-        console.log("tasks: " + data.issues.length )
         
         if ( data.issues.length != 0 ) {    
             if (this.reloadCount == 1) {
@@ -192,6 +185,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     
     Redmine.prototype.onLoadStories = function(data) {
         this.$scope.stories = [];
+        this.allStories = [];
 
         if ( data != null ) {
             for (var v in data.versions) {
@@ -524,9 +518,13 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             data : e,
             success : function(data) {
                 if ( callback != undefined ) {
-                    $.proxy(callback, self)(
-                        jQuery.parseJSON(data)
-                    );
+                    if ( data != "" ) {
+                        $.proxy(callback, self)(
+                            jQuery.parseJSON(data)
+                        );
+                    } else {
+                        $.proxy(callback, self)();
+                    }
                 }
             }
         });

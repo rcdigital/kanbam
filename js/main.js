@@ -4,7 +4,7 @@ require.config({
 		jqueryui: 'lib/jquery-ui-1.10.0.custom.min',
 		bootstrap: 'lib/bootstrap.min',
 		underscore: 'lib/underscore-min',
-		plugins: 'lib/plugins'
+		plugins: 'plugins'
 	},
 	shim: {
         'bootstrap': ['jquery'],

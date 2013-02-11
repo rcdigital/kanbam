@@ -39,7 +39,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             this.$scope.tool.start();
         }
         
-        $(".menu").stop().animate({ bottom: -40 }, 50, 'easeOutQuad' );
+        $(".footer").stop().animate({ bottom: -46 }, 50, 'easeOutQuad' );
         
         this.$scope.formatHour = function(hour, isZero) {
             if ( hour == 0 || hour == undefined ) {
@@ -85,7 +85,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     }
     
     Kanbam.prototype.startEvents = function() {
-        this.isMenuOpen = false;
+        this.isFooterOpen = false;
     
         $(".saveSettings").click( this.saveSettings );
          
@@ -94,28 +94,28 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         });
         
         $(window).mousemove(function(e) {
-            if ( !$(".menuItems .dropdown-menu").is(":visible") ) {
+            if ( !$(".footer .dropdown-menu").is(":visible") ) {
                 if (e.clientY >= $(window).height() - 150) {
-                    if (!self.isMenuOpen) {
-                        $(".menu").stop().animate({ bottom: 0 }, 250, 'easeOutQuad'  );
+                    if (!self.isFooterOpen) {
+                        $(".footer").stop().animate({ bottom: 0 }, 250, 'easeOutQuad'  );
                     }
-                    self.isMenuOpen = true;
+                    self.isFooterOpen = true;
                 } else {
-                    if (self.isMenuOpen) {
-                        $(".menu").stop().animate({ bottom: -40 }, 50, 'easeOutQuad' );
+                    if (self.isFooterOpen) {
+                        $(".footer").stop().animate({ bottom: -46 }, 50, 'easeOutQuad' );
                     }
-                    self.isMenuOpen = false;
+                    self.isFooterOpen = false;
                 }
             }
         });
         
-        $("#addTaskForm").submit(function() {
-            if ( $("#taskName").val() == "" ) { 
+        $("#new-task-form").submit(function() {
+            if ( $(".task-name").val() == "" ) { 
                 alert("Insert a correct task name.");
                 return false;
             }
             
-            if ( isNaN( $("#taskHours").val() ) ) { 
+            if ( isNaN( $(".task-hours").val() ) ) { 
                 alert("Insert only numbers in task hours.");
                 return false;
             }
@@ -131,71 +131,63 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             }
             
             self.$scope.tool.addTask({
-                name : $("#taskName").val(),
+                name : $(".task-name").val(),
                 story_id : Number( self.currentStory ),
-                story_name : $(".taskStory .btn-label").html(),
+                story_name : $(".task-story-label").html(),
                 type : self.currentActivity,
-                estimated : Number( $("#taskHours").val() )
+                estimated : Number( $(".task-hours").val() )
             });
             
-            $("#taskName").val("");
-            $("#taskHours").val("");
-            $(".newTaskDetail #taskName").focus();
+            $(".task-name").val("");
+            $(".task-name").focus();
+            $(".task-hours").val("");
             
             return false;
         });
         
-        $("#addStoryForm").submit(function() {
-            if ( $("#storyName").val() == "" ) { 
+        $("#new-story-form").submit(function() {
+            if ( $(".story-name").val() == "" ) { 
                 alert("Insert a correct story name.");
                 return false;
             }
             
-            self.$scope.tool.addStory( $("#storyName").val() );
+            self.$scope.tool.addStory( $(".story-name").val() );
             
-            $("#storyName").val("");
+            $(".story-name").val("");
             
             return false;
         });
         
-        $(".newTask a").click(function(e) {
+        $(".new-task-btn").click(function(e) {
             e.preventDefault();
             
-            $(".menuDetail").hide("fast");
-            $(".menu .menuItems .item a").removeAttr("style");
+            $(".footer-detail").hide("fast");
             
-            $(".newTaskDetail").css("overflow", "auto").show("fast", function() {
+            $(".task-detail").css("overflow", "auto").show("fast", function() {
                 $(this).css("overflow", "visible");
             });
             
-            $(this).attr("style", "pointer-events: none;");
-            
-            $(".newTaskDetail #taskName").focus();
+            $(".task-name").focus();
         });
         
-        $(".newTaskDetail #taskCancel").click(function() {
-            $(".newTaskDetail").hide("fast");
-            $(".newTask a").removeAttr("style");
+        $(".task-cancel").click(function() {
+            $(".task-detail").hide("fast");
         });
         
-        $(".newStory a").click(function(e) {
+        $(".new-story-btn").click(function(e) {
             e.preventDefault();
             
-            $(".menuDetail").hide("fast");
-            $(".menu .menuItems .item a").removeAttr("style");
+            $(".footer-detail").hide("fast");
             
-            $(".newStoryDetail").css("overflow", "auto").show("fast", function() {
+            $(".story-detail").css("overflow", "auto").show("fast", function() {
                 $(this).css("overflow", "visible");
             });
             
-            $(this).attr("style", "pointer-events: none;");
-            
-            $(".newStoryDetail #storyName").focus();
+            $(".story-name").focus();
         });
         
-        $(".newStoryDetail #storyCancel").click(function() {
-            $(".newStoryDetail").hide("fast");
-            $(".newStory a").removeAttr("style");
+        $(".story-cancel").click(function() {
+            $(".story-detail").hide("fast");
         });
         
         $(".settings-btn").click( function() {
@@ -243,18 +235,13 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             self.$scope.tool.changeProject( $(this).attr("id") );
         });
         
-        $(".taskActivity ul li a").click(function(e) {
+        $(".task-activity a").click(function(e) {
             e.preventDefault();
             
-            $(".taskActivity .btn-label").html( $(this).html() );
+            $(".task-activity-label").html( $(this).html() );
             
             self.currentActivity = $(this).attr("id");
         });
-        
-        $(".project-list").offset().right = $(".project-dropdown-btn").offset().right;
-        
-        
-        $(".project-list").offset().top = $(".project-dropdown-btn").offset().top + $(".project-dropdown-btn").height();
     }
     
     Kanbam.prototype.tasksEvents = function() {
@@ -288,10 +275,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             out: function( e, ui ) { $(this).removeClass("contentHover"); }
         });
         
-        $(".taskStory ul li a").click(function(e) {
+        $(".task-story a").click(function(e) {
             e.preventDefault();
             
-            $(".taskStory .btn-label").html( $(this).html() );
+            $(".task-story-label").html( $(this).html() );
             
             self.currentStory = $(this).attr("id");
         });

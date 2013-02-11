@@ -54,8 +54,8 @@
                         <div class="project-dropdown">
                             <div class="btn-group">
                                 <button class="btn button dropdown-toggle btn-inverse" data-toggle="dropdown">
-                                    PROJECTS
-                                    <i class="icon icon-project"></i>
+                                     <i class="icon-th-list icon-white"></i> PROJECTS
+                                   
                                 </button>
                                 <ul class="project-list dropdown-menu">
                                     <li ng-repeat="project in projects" ng-switch on="project.parent">
@@ -66,10 +66,10 @@
                             </div>
                         </div>
                         <div class="settings-btn">
-                            <button class="btn button" type="button"><i class="icon icon-settings"></i></button>
+                            <button class="btn button" type="button"><i class="icon-cog icon-white"></i></button>
                         </div>
                         <div class="search-btn">
-                            <button class="btn button" type="button"><i class="icon icon-search"></i></button>
+                            <button class="btn button" type="button"><i class="icon-search icon-white"></i></button>
                         </div>
                     </div>
                 </div>
@@ -140,55 +140,69 @@
             <div class="popup">
                 <iframe src="" width="80%" height="600"></iframe>
             </div>
-            <div class="menu">
-                <div class="menuToggle">
-                    <div class="menuToggleArea">                        
-                        <div class="icon"></div>
-                        <div class="area"></div>
-                    </div>
+            <div class="footer">
+                <div class="footer-arrow">
+                    <img src="img/aba.png" />
                 </div>
-                <div class="menuItems">
-                    <div class="newTask item">
-                        <a href="#" class="menuButton"><i class="icon-pencil icon-white"></i> New Task</a>
-                        <div class="newTaskDetail menuDetail">
-                            <form id="addTaskForm" action="">
-                                <input id="taskName" type="text" placeholder="Task name" name="taskName" />
-                                <input id="taskHours" class="taskHours" type="text" placeholder="0" />
-                                <div class="labelHoursNewTask">
-                                    hs
+                <div class="footer-items">
+                    <div class="footer-item new-task">
+                        <div class="footer-btn">
+                            <button class="btn button new-task-btn"><i class="icon-check icon-white"></i> NEW TASK</button>
+                        </div>
+                        <div class="footer-detail task-detail">
+                            <form id="new-task-form" action="">
+                                <div class="task-inputs">
+                                    <input class="input task-name" type="text" placeholder="Task name" name="taskName" />
+                                    <i class="icon-time icon-white task-icon"></i>
+                                    <input class="input task-hours" type="text" placeholder="0" />
                                 </div>
-                                <div class="btn-group taskActivity combo">
-                                    <button class="btn btn-label btn-danger">Choose an Activity</button>
-                                    <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                <div class="task-hours-label">Hs</div>
+                                <div class="btn-group dropup task-activity">
+                                    <button class="btn button btn-label btn-inverse task-activity-label" data-toggle="dropdown">CHOOSE AN ACTIVITY</button>
+                                    <button class="btn button dropdown-toggle btn-inverse" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu dropdown-up">
                                         <li ng-repeat="activity in activities"><a href="#" id="{{activity.id}}">{{activity.name}}</a></li>
                                     </ul>
                                 </div>
-                                <div class="btn-group taskStory combo">
-                                    <button class="btn btn-label btn-danger">Choose a Story</button>
-                                    <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                                <div class="btn-group dropup task-story">
+                                    <button class="btn button btn-inverse task-story-label" data-toggle="dropdown">CHOOSE A STORY</button>
+                                    <button class="btn button dropdown-toggle btn-inverse" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li ng-repeat="story in stories"><a href="#" id="{{story.id}}">{{story.name}}</a></li>
                                     </ul>
                                 </div>
-                                <button class="btn btn-danger saveTask" type="submit">Save</button>
-                                <button id="taskCancel" class="btn btn-link" type="button">Cancel</button>
+                                <div class="task-buttons">
+                                    <button class="btn button task-save" type="submit">SAVE</button>
+                                    <button class="btn button task-cancel" type="button">CANCEL</button>
+                                </div>
                             </form>
                         </div>
                     </div>
-                    <div class="newStory item">
-                        <a href="#" class="menuButton"><i class="icon-align-justify icon-white"></i> New Story</a>
-                        <div class="newStoryDetail menuDetail">
-                            <form id="addStoryForm" action="">
-                                <input id="storyName" type="text" placeholder="Story name" />
-                                <button class="btn btn-danger saveStory" type="submit">Save</button>
-                                <button id="storyCancel" class="btn btn-link" type="button">Cancel</button>
+                    <div class="footer-separator">
+                        <img src="img/separador-barra-baixo.png" />
+                    </div>
+                    <div class="footer-item new-story">
+                        <div class="footer-btn">
+                            <button class="btn button new-story-btn"><i class="icon-file icon-white"></i> NEW STORY</button>
+                        </div>
+                        <div class="footer-detail story-detail">
+                            <form id="new-story-form" action="">
+                                <div class="task-inputs">
+                                    <input id="storyName" class="input story-name" type="text" placeholder="Story name" />
+                                </div>
+                                <div class="task-buttons">
+                                    <button class="btn button story-save" type="submit">SAVE</button>
+                                    <button class="btn button story-cancel" type="button">CANCEL</button>
+                                </div>
                             </form>
                         </div>
+                    </div>
+                    <div class="footer-separator">
+                        <img src="img/separador-barra-baixo.png" />
                     </div>
                 </div>
             </div>
