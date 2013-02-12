@@ -191,7 +191,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             for (var v in data.versions) {
                 this.allStories.push({ 
                     id : data.versions[v].id,
-                    name : data.versions[v].name
+                    name : data.versions[v].name,
+                    date : ( data.versions[v].due_date == undefined ) ? "" : data.versions[v].due_date
                 });
             }
             
@@ -269,7 +270,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 todo: _.filter(stories[h], function(task) { return ( task.status_name == "TODO" ) == 1; }),
                 doing: _.filter(stories[h], function(task) { return ( task.status_name == "DOING" ) == 1; }), 
                 done: _.filter(stories[h], function(task) { return ( task.status_name == "DONE" ) == 1; }),
-                total_estimated: _.reduce(stories[h], function(memo, task){ return (task.estimated == undefined) ? memo : memo + task.estimated; }, 0)
+                total_estimated: _.reduce(stories[h], function(memo, task){ return (task.estimated == undefined) ? memo : memo + task.estimated; }, 0),
+                date : this.getDateByStoryId( stories[h][0].story_id )
             });
         }
         
@@ -465,6 +467,14 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     
     Redmine.prototype.onAddTask = function() {
         this.reload();
+    }
+    
+    Redmine.prototype.getDateByStoryId = function(id) {
+        for (var i = 0; i < this.allStories.length; i++) {
+            if (this.allStories[i].id == id) {
+                return this.allStories[i].date;
+            }
+        }
     }
     
     Redmine.prototype.getStoryById = function(id) {

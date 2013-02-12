@@ -97,14 +97,19 @@
                             <td class="stories-td {{isFirstStory($index)}}">
                                 <div class="stories-box">
                                     <div class="stories-content">
-                                        <div class="stories-label">{{story.name}}<br /><span class="stories-info"><i class="icon-time icon-alpha"></i> {{formatHour(story.total_estimated, true)}}</span></div>
+                                        <div class="stories-label">{{story.name}}<br />
+                                            <span class="stories-info">
+                                                <i class="icon-time icon-alpha"></i> {{formatHour(story.total_estimated, true)}}
+                                                <i class='{{story.date != "" && "icon-calendar icon-alpha stories-icon-calendar" || "" }}'></i> {{formatDate(story.date)}}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
                             <td id="TODO" class="todo tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.todo">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="post-it-task">#{{post.id}} - {{post.spent_time}}</div>
+                                        <div class="post-it-task">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</a></div>
                                         <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>

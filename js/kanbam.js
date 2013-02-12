@@ -53,6 +53,16 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             }
         }
         
+        this.$scope.formatDate = function(date) {
+            if ( ( date != "" ) && ( date != undefined ) ) {
+                var d = date.split("-")[2];
+                var m = parseInt( date.split("-")[1] );
+                var nameOfMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                
+                return nameOfMonths[ parseInt(m) - 1 ] + " " + d;
+            }
+        }
+        
         this.$scope.formatUserName = function(name) {
             return String(name).split(" ")[0];
         }
