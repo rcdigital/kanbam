@@ -127,7 +127,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
                     if (!self.isFooterOpen) {
                         $(".footer").stop().animate({ bottom: 0 }, 250, 'easeOutQuad' );
                         $(".stories").animate({ marginBottom: 64 }, 250, 'easeOutQuad' );
-                        $('html, body').animate({ scrollTop: 999999 }, 350);
+                        
+                        if ( $(document).height() <= $(document).scrollTop() + $(window).height() + 64 ) {
+                            $('html, body').animate({ scrollTop: 999999 }, 350);
+                        }
                     }
                     self.isFooterOpen = true;
                 } else {
