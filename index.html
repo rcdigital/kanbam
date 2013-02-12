@@ -104,11 +104,11 @@
                             <td id="TODO" class="todo tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.todo">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-task">#{{post.id}} - {{post.spent_time}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</a></div>
-                                        <div class="post-it-hours">{{formatHour(post.estimated)}}</div>
-                                        <div class="post-it-spent">{{formatHour(post.spent_time)}}</div>
+                                        <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>
+                                        <div class="post-it-spent">{{formatHour(post.spent_time)}} <i class='{{post.spent_time != 0 && "icon-ok icon-alpha post-it-icon-spent" || "" }}'></i></div>
                                     </div>
                                 </div>
                             </td>
@@ -118,8 +118,8 @@
                                         <div class="post-it-task">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</div>
-                                        <div class="post-it-hours">{{formatHour(post.estimated)}}</div>
-                                        <div class="post-it-spent">{{formatHour(post.spent_time)}}</div>
+                                        <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>
+                                        <div class="post-it-spent">{{formatHour(post.spent_time)}} <i class='{{post.spent_time != 0 && "icon-ok icon-alpha post-it-icon-spent" || "" }}'></i></div>
                                     </div>
                                 </div>
                             </td>
@@ -129,8 +129,8 @@
                                         <div class="post-it-task">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</div>
-                                        <div class="post-it-hours">{{formatHour(post.estimated)}}</div>
-                                        <div class="post-it-spent">{{formatHour(post.spent_time)}}</div>
+                                        <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>
+                                        <div class="post-it-spent">{{formatHour(post.spent_time)}} <i class='{{post.spent_time != 0 && "icon-ok icon-alpha post-it-icon-spent" || "" }}'></i></div>
                                     </div>
                                 </div>
                             </td>

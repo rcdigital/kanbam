@@ -23,14 +23,14 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 /* Project */
 
 .project { position: fixed; width: 100%; z-index: 99999; background-image: url(../img/topo-pattern.png); height: 65px; display: table; }
-.project-title { position:absolute; width:100%; margin-left: 10px; margin-top: 12px; font-size: 20px; font-weight: bold; text-transform: uppercase; color: #706c66; text-shadow: 1px 1px 1px rgba(0,0,0,.75); }
+.project-title { position:absolute; width:100%; margin-left: 10px; margin-top: 14px; font-size: 20px; font-weight: bold; text-transform: uppercase; color: #706c66; text-shadow: 1px 1px 1px rgba(0,0,0,.75); }
 .project-title-mask { float: left; }
 .project-right { position: absolute; right:0px; }
 .project-right-content { float:left; background-image: url(../img/topo-pattern.png); height: 45px; }
 .project-indicator { float: left; color:#FFF; width:70px; font-size: 14px; line-height: 14px; margin-top: 10px; text-align: center; margin-right: 10px; }
 .project-indicator-label { font-size: 10px; color: #9d9b98; text-shadow: 1px 1px rgba(0,0,0,.75); line-height: 0px; font-weight: 400; }
 .project-indicator-value { font-size: 12px; text-shadow: 1px 1px rgba(0,0,0,.75); }
-.project-dropdown { float: left; margin-left: 10px; margin-top: 10px; }
+.project-dropdown { float: left; margin-left: 10px; margin-top: 11px; }
 .project-list { height: 490px; overflow-y: auto; overflow-x: hidden; position: absolute; float: right; }
 .project-list a { width:132px; }
 .project-progress { float: left; vertical-align: middle; width: 200px; margin-top: 10px; }
@@ -39,8 +39,8 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .project-bar-todo { background-color: #ff7778; background-image: -webkit-linear-gradient(top, #f3babb, #e25859); background-image: -moz-linear-gradient(top, #f3babb, #e25859); background-image: -o-linear-gradient(top, #f3babb, #e25859); background-image: -ms-linear-gradient(top, #f3babb, #e25859); background-image: linear-gradient(to bottom, #f3babb, #e25859); }
 .project-bar-doing {background-color: #e6c47a; background-image: -webkit-linear-gradient(top, #e8dbba, #ba9353); background-image: -moz-linear-gradient(top, #e8dbba, #ba9353); background-image: -o-linear-gradient(top, #e8dbba, #ba9353); background-image: -ms-linear-gradient(top, #e8dbba, #ba9353); background-image: linear-gradient(to bottom, #e8dbba, #ba9353); }
 .project-bar-done { background-color: #6ed070; background-image: -webkit-linear-gradient(top, #b0dcb1, #449a45); background-image: -moz-linear-gradient(top, #b0dcb1, #449a45); background-image: -o-linear-gradient(top, #b0dcb1, #449a45); background-image: -ms-linear-gradient(top, #b0dcb1, #449a45); background-image: linear-gradient(to bottom, #b0dcb1, #449a45); }
-.settings-btn { float: left; margin-top: 10px; margin-left: 10px; }
-.search-btn { float: left; margin-top: 10px; margin-left: 10px; margin-right: 10px; }
+.settings-btn { float: left; margin-top: 11px; margin-left: 10px; }
+.search-btn { float: left; margin-top: 11px; margin-left: 10px; margin-right: 10px; }
 
 .indicator-success { border-color: #002709 !important; background-color: rgba(119, 180, 96, .4) !important; }
 .indicator-attention { border-color: #281E00 !important; background-color: rgba(255, 201, 38, .4) !important; }
@@ -89,7 +89,7 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .stories-box { width: 178px; height:137px; background-image: url(../img/story.png); margin-left: 10px; margin-top: 3px; }
 .stories-content { width: 150px; height:110px; float: left; margin-left: 14px; margin-top: 4px; }
 .stories-label { color: #5b6f8c; font-size: 15px; width: 150px; height: 110px; text-align: center; margin-top: 6px; vertical-align: middle; display: table-cell;  }
-.stories-info { font-size: 12px; color: #706f6c; }
+.stories-info { font-size: 12px; color: #AAA; }
 .tasks-td { border:1px solid #CCC; -moz-box-shadow: inset 1px 1px 1px 1px #DEDEDE; -webkit-box-shadow: inset 1px 1px 1px 1px #DEDEDE; box-shadow: inset 1px 1px 1px 1px #DEDEDE; vertical-align: top; }
 .tasks-td-hover { background-image: url(../img/textura-papel-selected.png); -moz-box-shadow: inset 0 0 5px 5px #CEE0F4; -webkit-box-shadow: inset 0 0 5px 5px #CEE0F4; box-shadow: inset 0 0 5px 5px #CEE0F4; }
 
@@ -104,6 +104,8 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .post-it-hours { display: table-cell; float: right; font-size: 9px; font-weight: bold; text-align: right; padding: 1px 6px 1px 6px; margin-top: -17px; margin-right: -2px; min-width: 14px; letter-spacing: -1px;  }
 .post-it-spent { display: table-cell; float: left; font-size: 9px; font-weight: bold; text-align: right; padding: 1px 6px 1px 6px; margin-top: -17px; margin-right: -3px; min-width: 14px; letter-spacing: -1px;  }
 .post-it-task { position: absolute;  font-size: 9px; font-weight: bold; text-align: center; padding: 1px 6px 1px 6px; min-width: 14px; letter-spacing: -1px; margin-top: 4px; }
+.post-it-icon-estimated { margin-top: -1px; }
+.post-it-icon-spent { margin-top: -2px; }
 
 .post-it-red { background-color: #ffd1d2 !important; color: #ff6f6f !important; }
 .post-it-blue { background-color: #ccebff !important; color: #54bcf0 !important; }

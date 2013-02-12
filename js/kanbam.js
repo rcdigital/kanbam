@@ -585,6 +585,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     }
     
     Kanbam.prototype.fixStoryCell = function() {
-        $(".tasks-column").attr("style", "width:" + parseInt( ( $(window).width() - $(".stories-column").width() ) / 3 ) + "px !important" );
+        $(".tasks-column").attr("style", "width:" + ( Math.round( ( $(window).width() - $(".stories-column").width() ) / 3 ) - 1 ) + "px !important" );
     }
 });
