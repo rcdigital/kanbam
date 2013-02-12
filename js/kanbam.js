@@ -86,12 +86,12 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         }
         
         this.$scope.formatVariation = function(variation) {
-            if ( variation == null ) {
-                variation = 0;
+            if ( variation == null || variation == undefined || variation == "undefined" || isNaN( variation ) ) {
+                return 0;
             }
             
             if ( ( variation >= 1000 ) || ( variation <= -1000 ) ) {
-               variation =  (variation / 1000).toFixed(1) + "K";
+               variation = (variation / 1000).toFixed(1) + "K";
             }
             
             return variation;
@@ -581,7 +581,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     }
     
     Kanbam.prototype.showError = function(message) {
-        $(".alert").fadeIn("fast");
+        $(".alert").fadeIn("fast").delay(3000).fadeOut("fast");;
         $(".alert-message").html( message );
     }
     

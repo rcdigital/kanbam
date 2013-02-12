@@ -36,9 +36,5 @@ if ( $action == "loadProjects" ) {
 } else if ( $action == "loadSpentTimeActivities" ) {
     echo json_encode( $client->api('time_entry_activity')->all() );
 } else if ( $action == "addSpentTime" ) {
-    $client->api('time_entry')->create(array(
-        'issue_id'    => $_REQUEST["issue_id"],
-        'hours'       => $_REQUEST["hours"],
-        'activity_id' => $_REQUEST["activity_id"]
-    ));
+    $client->api('time_entry')->create(array( 'issue_id' => $_REQUEST["issue_id"], 'hours' => $_REQUEST["hours"], 'activity_id' => $_REQUEST["activity_id"] ));
 }

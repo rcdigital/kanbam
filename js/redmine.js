@@ -127,6 +127,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.$scope.stories = [];
         this.$scope.currentProject = this.getProjectById(id);
         this.$scope.currentProject.memberships = undefined;
+        
                 
         $.cookie("lastProjectId", id);
         $.cookie("lastProjectName", this.getProjectById(id).name);
@@ -146,7 +147,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     Redmine.prototype.onLoadTasksByProjectId = function(data) {
         this.$scope.tasks = [];
         
-        if ( data.issues.length != 0 ) {    
+        if ( data.issues.length != 0 ) {
             if (this.reloadCount == 1) {
                 for ( var i in data.issues ) {
                     this.$scope.tasks.push({
@@ -168,10 +169,11 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 this.$scope.tasks = _.sortBy(this.$scope.tasks, function(task){ return task.id; });
             }
             
-            this.reloadCount--;
         } else {
             this.kanbam.showError("No task registered for this project.");
         }
+        
+        this.reloadCount--;
         
         this.loadStories(this.$scope.currentProject.id);
     }

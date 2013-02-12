@@ -157,4 +157,4 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 
 /* Error Messages */
 
-.alert { widtH:400px; position: absolute; z-index: 9999999; margin-left: 470px; display: none; }
+.alert { width:400px; position: fixed; z-index: 9999999; margin-left: -200px; display: none; left: 50%; }
