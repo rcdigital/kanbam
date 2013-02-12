@@ -86,7 +86,7 @@
                 </table>
             </div>
             <div class="stories">
-                <table>
+                <table class="stories-table">
                     <colgroup>
                         <col class="stories-column"/>
                         <col class="tasks-column"/>
@@ -139,6 +139,13 @@
                                         <div class="post-it-spent">{{formatHour(post.spent_time)}} <i class='{{post.spent_time != 0 && "icon-ok icon-alpha post-it-icon-spent" || "" }}'></i></div>
                                     </div>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="stories-page-footer-middle" colspan="3">
+                                <img class="stories-page-footer-left" src="img/paginas-empilhadas-esq.png" />
+                                <img class="stories-page-footer-right" src="img/paginas-empilhadas-dir.png" />
                             </td>
                         </tr>
                     </tbody>
