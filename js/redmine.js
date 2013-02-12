@@ -1,3 +1,9 @@
+/*!
+* Kanb.am by @marloscarmo
+* Author: Marlos Carmo
+* http://www.apache.org/licenses/LICENSE-2.0.txt
+*/
+
 define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     
     exports.init = function($scope, kanbam) {
