@@ -21,9 +21,9 @@
             <h4>Error</h4>
             <span class="alert-message">This project don't have any members.</span>
         </div>
-        <div class="searchBox">
+        <div class="search-box">
             <form class="form-horizontal">
-                <input type="text" placeholder="Type your keyword" class="searchValue" /><button class="btn btn-primary closeBtn" type="button"><i class="icon-remove icon-white"></i></button>
+                <input type="text" placeholder="Type your keyword" class="search-value" /><button class="btn btn-primary search-close-btn" type="button"><i class="icon-remove icon-white"></i></button>
             </form>
         </div>
         <div class="main">
@@ -54,7 +54,7 @@
                         <div class="project-dropdown">
                             <div class="btn-group">
                                 <button class="btn button dropdown-toggle btn-inverse" data-toggle="dropdown">
-                                     <i class="icon-th-list icon-white"></i> PROJECTS
+                                     <i class="icon-th-list icon-white-alpha"></i> PROJECTS
                                    
                                 </button>
                                 <ul class="project-list dropdown-menu">
@@ -66,70 +66,71 @@
                             </div>
                         </div>
                         <div class="settings-btn">
-                            <button class="btn button" type="button"><i class="icon-cog icon-white"></i></button>
+                            <button class="btn button" type="button"><i class="icon-cog icon-white-alpha"></i></button>
                         </div>
                         <div class="search-btn">
-                            <button class="btn button" type="button"><i class="icon-search icon-white"></i></button>
+                            <button class="btn button" type="button"><i class="icon-search icon-white-alpha"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="head">
-                <table>
+                <table class="head-table">
                     <tr>
-                        <th class="colStories">STORIES</th>
-                        <th class="column">TODO</th>
-                        <th class="column">DOING</th>
-                        <th class="column">DONE</th>
+                        <th class="head-stories"><div class="head-story-title">STORIES</div></th>
+                        <th class="head-tasks"><div class="head-task-title">TO DO</div></th>
+                        <th class="head-tasks head-separator"><div class="head-task-title">DOING</div></th>
+                        <th class="head-tasks head-separator"><div class="head-task-title">DONE</div></th>
                     </tr>
                 </table>
             </div>
             <div class="stories">
                 <table>
                     <colgroup>
-                        <col class="colStories"/>
-                        <col class="colTodo column"/>
-                        <col class="colDoing column"/>
-                        <col class="colDone column"/>
+                        <col class="stories-column"/>
+                        <col class="tasks-column"/>
+                        <col class="tasks-column tasks-column-shadow"/>
+                        <col class="tasks-column"/>
                     </colgroup>
                     <tbody>
                         <tr id="{{story.id}}" ng-repeat="story in stories">
-                            <td class="labelStory">
-                                <div class="labelStoryBox">
-                                    {{story.name}}<br />
-                                    <span class="estimatedTime">Estimated: {{formatHour(story.total_estimated, true)}}</span>
+                            <td class="stories-td {{isFirstStory($index)}}">
+                                <div class="stories-box">
+                                    <div class="stories-content">
+                                        <div class="stories-label">{{story.name}}<br /><span class="stories-info"><i class="icon-time icon-alpha"></i> {{formatHour(story.total_estimated, true)}}</span></div>
+                                    </div>
                                 </div>
                             </td>
-                            <td id="TODO" class="todo content">
+                            <td id="TODO" class="todo tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.todo">
-                                    <div class="area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="task">#{{post.id}}</div>
-                                        <div class="assigned_to">{{formatUserName(post.assigned_to_name)}}</div>
-                                        <div class="name">{{post.name}}</a></div>
-                                        <div class="hours">{{formatHour(post.estimated)}}</div>
-                                        <div class="spent">{{formatHour(post.spent_time)}}</div>
+                                    <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
+                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
+                                        <div class="post-it-name">{{post.name}}</a></div>
+                                        <div class="post-it-hours">{{formatHour(post.estimated)}}</div>
+                                        <div class="post-it-spent">{{formatHour(post.spent_time)}}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td id="DOING" class="doing content">
+                            <td id="DOING" class="doing tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.doing">
-                                    <div class="area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="task">#{{post.id}}</div>
-                                        <div class="assigned_to">{{formatUserName(post.assigned_to_name)}}</div>
-                                        <div class="name">{{post.name}}</div>
-                                        <div class="hours">{{formatHour(post.estimated)}}</div>
-                                        <div class="spent">{{formatHour(post.spent_time)}}</div>
+                                    <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
+                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
+                                        <div class="post-it-name">{{post.name}}</div>
+                                        <div class="post-it-hours">{{formatHour(post.estimated)}}</div>
+                                        <div class="post-it-spent">{{formatHour(post.spent_time)}}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td id="DONE" class="done content">
+                            <td id="DONE" class="done tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.done">
-                                    <div class="area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="task">#{{post.id}}</div>
-                                        <div class="assigned_to">{{formatUserName(post.assigned_to_name)}}</div>
-                                        <div class="name">{{post.name}}</div>
-                                        <div class="hours">{{formatHour(post.estimated)}}</div>
-                                        <div class="spent">{{formatHour(post.spent_time)}}</div>
+                                    <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
+                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
+                                        <div class="post-it-name">{{post.name}}</div>
+                                        <div class="post-it-hours">{{formatHour(post.estimated)}}</div>
+                                        <div class="post-it-spent">{{formatHour(post.spent_time)}}</div>
                                     </div>
                                 </div>
                             </td>
@@ -137,7 +138,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="popup">
+            <div class="task-advanced-edit">
                 <iframe src="" width="80%" height="600"></iframe>
             </div>
             <div class="footer">
@@ -147,13 +148,13 @@
                 <div class="footer-items">
                     <div class="footer-item new-task">
                         <div class="footer-btn">
-                            <button class="btn button new-task-btn"><i class="icon-check icon-white"></i> NEW TASK</button>
+                            <button class="btn button new-task-btn"><i class="icon-check icon-white-alpha"></i> NEW TASK</button>
                         </div>
                         <div class="footer-detail task-detail">
                             <form id="new-task-form" action="">
                                 <div class="task-inputs">
                                     <input class="input task-name" type="text" placeholder="Task name" name="taskName" />
-                                    <i class="icon-time icon-white task-icon"></i>
+                                    <i class="icon-time icon-white-alpha task-icon"></i>
                                     <input class="input task-hours" type="text" placeholder="0" />
                                 </div>
                                 <div class="task-hours-label">Hs</div>
@@ -187,7 +188,7 @@
                     </div>
                     <div class="footer-item new-story">
                         <div class="footer-btn">
-                            <button class="btn button new-story-btn"><i class="icon-file icon-white"></i> NEW STORY</button>
+                            <button class="btn button new-story-btn"><i class="icon-file icon-white-alpha"></i> NEW STORY</button>
                         </div>
                         <div class="footer-detail story-detail">
                             <form id="new-story-form" action="">
@@ -207,10 +208,10 @@
                 </div>
             </div>
             
-            <div id="settingsModal" class="modal hide fade">
+            <div class="settings modal hide fade">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <span class="title">Kanb.am Settings</span>
+                    <span class="settings-title">Kanb.am Settings</span>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
@@ -229,16 +230,16 @@
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="redmineURI">Redmine URI:</label>
+                            <label class="control-label" for="redmine-uri">Redmine URI:</label>
                             <div class="controls">
-                                <input type="text" class="input-xlarge" id="redmineURI" placeholder="http://" value="http://localhost/"><br />
+                                <input type="text" class="redmine-uri input-xlarge" id="redmine-uri" placeholder="http://" value="http://localhost/"><br />
                                 <span class="help-inline">Ex: http://myredmine.mydomain.com/</span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label" for="apiKey">Redmine API Key:</label>
+                            <label class="control-label" for="api-key">Redmine API Key:</label>
                             <div class="controls">
-                                <input type="text" class="input-xlarge" id="apiKey" placeholder="Paste your API Key here" value=""><br />
+                                <input type="text" class="api-key input-xlarge" id="api-key" placeholder="Paste your API Key here" value=""><br />
                                 <span class="help-inline">Ex: 62de4539a7d9a370afad56cdf20177235ef34374</span>
                             </div>
                         </div>
@@ -246,36 +247,36 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                    <button class="btn btn-primary saveSettings">Save changes</button>
+                    <button class="save-settings btn btn-primary">Save changes</button>
                 </div>
             </div>
             
-            <div class="popupTaskDetail popover fade in"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title">Task Edit - #{{editTask.id}}</h3><div class="popover-content"><p>
+            <div class="detail popover fade in"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title">Task Edit - #{{editTask.id}}</h3><div class="popover-content"><p>
                 <form class="form-horizontal">
                     <div class="control-group">
-                        <label class="control-label" for="taskNameEdit">Task Name:</label>
+                        <label class="control-label" for="detail-task-name">Task Name:</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" id="taskNameEdit" placeholder="Type your task name" value="{{editTask.name}}" />
+                            <input type="text" class="detail-task-name input-xlarge" id="detail-task-name" placeholder="Type your task name" value="{{editTask.name}}" />
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="inputEmail">Assigned To:</label>
+                        <label class="control-label">Assigned To:</label>
                         <div class="controls">
-                            <div class="btn-group memberships">
+                            <div class="detail-assigned-to btn-group">
                                 <button class="btn btn-label"></button>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
-                                <ul class="dropdown-menu assignedToList">
+                                <ul class="detail-assigned-to-list dropdown-menu">
                                     <li ng-repeat="member in currentProject.memberships"><a href="#" id="{{member.id}}">{{member.name}}</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="taskEstimatedHours">Estimated:</label>
+                        <label class="control-label" for="detail-estimated">Estimated:</label>
                         <div class="controls">
-                            <input type="text" class="input-mini hours" id="taskEstimatedHours" placeholder="0" value="{{editTask.estimated}}" />
+                            <input type="text" class="detail-estimated input-mini hours" id="detail-estimated" placeholder="0" value="{{editTask.estimated}}" />
                             <span class="help-inline">hs</span>
                         </div>
                     </div>
@@ -284,42 +285,42 @@
                     <div class="control-group">
                         <label class="control-label">Spent times:</label>
                         <div class="controls">
-                            <table class="spentTimes table table-bordered table-striped" ng-switch on="editTask.spent_time">
+                            <table class="detail-spent-times table table-bordered table-striped" ng-switch on="editTask.spent_time">
                                 <tr>
-                                    <th class="activity">Activity</th>
-                                    <th class="hours">Time</th>
-                                    <th class="action"></th>
+                                    <th class="detail-th-activity">Activity</th>
+                                    <th class="detail-th-hours">Time</th>
+                                    <th class="detail-th-action"></th>
                                 </tr>
                                 <tr id="{{spent_time.id}}" ng-repeat="spent_time in editTask.spent_time_list" >
                                     <td>{{spent_time.activity_name}}</td>
                                     <td>{{formatHour(spent_time.hours)}}</td>
-                                    <td><button id="{{spent_time.id}}" class="btn btn-mini btn-danger deleteSpentTime" type="button">Delete</button></td>
+                                    <td><button id="{{spent_time.id}}" class="detail-spent-remove btn btn-mini btn-danger" type="button">Delete</button></td>
                                 </tr>
                                 <tr ng-switch-when="0">
-                                    <td class="noActivityInserted" colspan="3">No activity inserted</td>
+                                    <td class="detail-no-activity" colspan="3">No activity inserted</td>
                                 </tr>                              
                             </table>
                             
-                            <div class="formLeft">
-                                <div class="btn-group spentTimesActivities">
+                            <div class="detail-form-left">
+                                <div class="detail-spent-activities btn-group">
                                     <button class="btn btn-mini btn-label">Select an activity</button>
                                     <button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
                                     </button>
-                                    <ul class="dropdown-menu assignedToList">
+                                    <ul class="detail-spent-activities-list dropdown-menu">
                                         <li ng-repeat="spentTimeActivity in spentTimeActivities"><a href="#" id="{{spentTimeActivity.id}}">{{spentTimeActivity.name}}</a></li>
                                     </ul>
                                 </div>
                             </div>
-                            <div class="formLeft">
-                                <input type="text" class="spentHours input-mini hours btn-mini" placeholder="0" value="{{updateTask.estimated_hours}}" />
+                            <div class="detail-form-left">
+                                <input type="text" class="detail-spent-hours input-mini hours btn-mini" placeholder="0" value="{{updateTask.estimated_hours}}" />
                                 <span class="help-inline">hs</span>
                             </div>
-                            <div class="formLeft">
-                                <button class="btnAddSpent btn btn-mini btn-primary">Add</button>
+                            <div class="detail-form-left">
+                                <button class="detail-spent-add btn btn-mini btn-primary">Add</button>
                             </div>
                             
-                            <div class="errorSpentActivity">Fill the fields correctly.</div>
+                            <div class="detail-spent-error">Fill the fields correctly.</div>
                         </div>
                         
                     </div>
@@ -327,13 +328,13 @@
                     <hr />
                     
                     <div class="control-group">
-                        <div class="footerLeft">
-                            <a href="#" class="updateOther">Advanced options</a>
+                        <div class="left">
+                            <a href="#" class="detail-advanced-edit">Advanced edit</a>
                         </div>
-                        <div class="footerRight">
-                            <button class="btn removeTask"><i class="icon-trash"></i></button>
-                            <button class="btn closePopover">Close</button>
-                            <button class="btn btn-primary updateTaskDetail">Save changes</button>
+                        <div class="right">
+                            <button class="detail-remove btn"><i class="icon-trash"></i></button>
+                            <button class="detail-close btn">Close</button>
+                            <button class="detail-update btn btn-primary">Save changes</button>
                         </div>
                     </div>
                 </form>

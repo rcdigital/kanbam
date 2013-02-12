@@ -31,10 +31,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         this.$scope.tool.init(this.$scope, this);
         
         if ( this.$scope.settings.apiKey == undefined ) {
-            $("#settingsModal").modal();
+            $(".settings").modal();
         } else {
-            $("#redmineURI").val( this.$scope.settings.redmineURI );
-            $("#apiKey").val( this.$scope.settings.apiKey );
+            $(".redmine-uri").val( this.$scope.settings.redmineURI );
+            $(".api-key").val( this.$scope.settings.apiKey );
             
             this.$scope.tool.start();
         }
@@ -82,15 +82,23 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             
             return variation;
         }
+        
+        this.$scope.isFirstStory = function(index) {
+            if ( index == 0 ) {
+                return "first-story";
+            } else {
+                return "";
+            }
+        }
     }
     
     Kanbam.prototype.startEvents = function() {
         this.isFooterOpen = false;
     
-        $(".saveSettings").click( this.saveSettings );
+        $(".save-settings").click( this.saveSettings );
          
         $(".settings-btn").click( function() {
-            $("#settingsModal").modal();
+            $(".settings").modal();
         });
         
         $(window).mousemove(function(e) {
@@ -191,18 +199,17 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         });
         
         $(".settings-btn").click( function() {
-            $("#settingsModal").modal();
+            $(".settings").modal();
         });
         
-        $(".popupTaskDetail .btnAddSpent").click(function(e) {
+        $(".detail-spent-add").click(function(e) {
             e.preventDefault();
-            
             self.addSpentTime();
         });
         
-        $(".popup").click(function() {
+        $(".task-advanced-edit").click(function() {
             $(this).hide();
-            $(".popupTaskDetail").fadeOut("fast");
+            $(".detail").fadeOut("fast");
             self.$scope.tool.reload();
         });
         
@@ -210,23 +217,19 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             self.fixStoryCell();
         });
         
-        $(".searchValue").keyup(function() {
+        $(".search-value").keyup(function() {
             self.search( $(this).val() ); 
         });
         
         $(".search-btn").click(function() {
-            $(".searchBox").attr("style", "margin-top:-60px");
-            $(".searchBox").animate({ marginTop: 0 }, 300);
-            $(".searchValue").select();
+            $(".search-box").attr("style", "margin-top:-60px");
+            $(".search-box").animate({ marginTop: 0 }, 300);
+            $(".search-value").select();
         });
         
-        $(".closeBtn").click(function() {
-            $(".searchBox").animate({ marginTop: -60 }, 150);
+        $(".search-close-btn").click(function() {
+            $(".search-box").animate({ marginTop: -60 }, 150);
         });
-        
-        $(".project-dropdown-btn").click(function() {
-            $(".project-list").fadeIn();
-        })
     }
     
     Kanbam.prototype.projectsEvents = function() {
@@ -237,15 +240,13 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         
         $(".task-activity a").click(function(e) {
             e.preventDefault();
-            
             $(".task-activity-label").html( $(this).html() );
-            
             self.currentActivity = $(this).attr("id");
         });
     }
     
     Kanbam.prototype.tasksEvents = function() {
-        $(".content").droppable({
+        $(".tasks-td").droppable({
             accept: ".post-it",
             drop: function( e, ui ) {
                 var dragArea = $(this);
@@ -255,7 +256,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
                 
                 dragArea.append(postIt);
                 postIt.attr("style", "position:relative;");
-                dragArea.removeClass("contentHover");
+                dragArea.removeClass("tasks-td-hover");
                 
                 self.$scope.tool.changeStatusTask({
                     id : postItId,
@@ -271,68 +272,65 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
                 
                 self.fixStoryCell();
             },
-            over: function( e, ui ) { $(this).addClass("contentHover"); },
-            out: function( e, ui ) { $(this).removeClass("contentHover"); }
+            over: function( e, ui ) { $(this).addClass("tasks-td-hover"); },
+            out: function( e, ui ) { $(this).removeClass("tasks-td-hover"); }
         });
         
         $(".task-story a").click(function(e) {
             e.preventDefault();
-            
             $(".task-story-label").html( $(this).html() );
-            
             self.currentStory = $(this).attr("id");
         });
     }
     
     Kanbam.prototype.editEvents = function() {
-        $(".popupTaskDetail .closePopover").click( function(e) { 
+        $(".detail-close").click( function(e) { 
             e.preventDefault();
             self.hideEditTask();
         });
         
-        $(".popupTaskDetail .removeTask").click( function(e) {
+        $(".detail-remove").click( function(e) {
             e.preventDefault();
             
-            $(".popupTaskDetail").fadeOut("fast"); 
+            $(".detail").fadeOut("fast"); 
             $('#post' + self.$scope.editTask.id).slideUp('fast');
             self.$scope.tool.removeTask( self.$scope.editTask.id );
         });
         
-        $(".popupTaskDetail .updateTaskDetail").click( function(e) {
+        $(".detail-update").click( function(e) {
             e.preventDefault();
             self.updateTaskDetail( self.$scope.editTask.id ); 
         });
         
-        $(".popupTaskDetail .memberships ul li a").click(function(e) {
+        $(".detail-assigned-to-list a").click(function(e) {
             e.preventDefault();
             
             self.$scope.editTask.assigned_to_id = $(this).attr("id");
             self.$scope.editTask.assigned_to_name = $(this).html();
-            $(".popupTaskDetail .memberships .btn-label").html( $(this).html() );
+            $(".detail-assigned-to .btn-label").html( $(this).html() );
         });
         
-        $(".popupTaskDetail .spentTimesActivities ul li a").click(function(e) {
+        $(".detail-spent-activities-list a").click(function(e) {
             e.preventDefault();
             
             self.$scope.editTask.spent_time_activity_id = $(this).attr("id");
             self.$scope.editTask.spent_time_activity_name = $(this).html();
-            $(".popupTaskDetail .spentTimesActivities .btn-label").html( $(this).html() );
+            $(".detail-spent-activities .btn-label").html( $(this).html() );
         });
         
         this.spentTimeEvents();
     }
     
     Kanbam.prototype.spentTimeEvents = function() {
-        $(".popupTaskDetail .deleteSpentTime").click(function(e){
+        $(".detail-spent-remove").click(function(e){
             e.preventDefault();
-            
             self.$scope.tool.removeSpentTime( $(this).attr("id") );
         });
     }
     
     Kanbam.prototype.saveSettings = function() {
-        var redmineURI = $("#redmineURI");
-        var apiKey = $("#apiKey");
+        var redmineURI = $(".redmine-uri");
+        var apiKey = $(".api-key");
     
         if (redmineURI.val() == "") {
             redmineURI.parent().parent().addClass("error");
@@ -362,29 +360,27 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         $.cookie("redmineURI", self.$scope.settings.redmineURI);
         $.cookie("tool", self.$scope.settings.tool);
         
-        $("#settingsModal").modal("hide");
+        $(".settings").modal("hide");
         
         self.$scope.tool.start();
     }
     
     Kanbam.prototype.addSpentTime = function() {
-        var spentHours = $(".popupTaskDetail .spentHours");
+        var spentHours = $(".detail-spent-hours");
     
         if ( spentHours.val() == "" ) {
-            $(".errorSpentActivity").show("fast");
+            $(".detail-spent-error").show("fast");
             return false;
-        } else {
-            
         }
         
         if ( self.$scope.editTask.spent_time_activity_name == undefined ) {
-            $(".errorSpentActivity").show("fast");
+            $(".detail-spent-error").show("fast");
             return false;
         } else {
             spentHours.parent().parent().removeClass("error");
         }
         
-        $(".errorSpentActivity").hide("fast");
+        $(".detail-spent-error").hide("fast");
     
         self.$scope.tool.addSpentTime({
             issueId : self.$scope.editTask.id,
@@ -436,25 +432,25 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
         self.$scope.editTask = task;
         
         if (self.$scope.editTask.assigned_to_name == "") {
-            $(".popupTaskDetail .memberships .btn-label").html( "Select an user" );
+            $(".detail-assigned-to .btn-label").html( "Select an user" );
         } else {
-            $(".popupTaskDetail .memberships .btn-label").html( self.$scope.editTask.assigned_to_name );
+            $(".detail-assigned-to .btn-label").html( self.$scope.editTask.assigned_to_name );
         }
         
         self.onUpdateData();
     
-        $(".popupTaskDetail").show();
+        $(".detail").show();
         
-        $(".popupTaskDetail .spentTimesActivities .btn-label").html( "Select an activity" );
+        $(".detail-spent-activities .btn-label").html( "Select an activity" );
         
-        $(".popupTaskDetail .spentHours").val("");
-        $(".popupTaskDetail .spentHours").focus();
+        $(".detail-spent-hours").val("");
+        $(".detail-spent-hours").focus();
         
-        $(".updateOther").click(function(e) {
+        $(".detail-advanced-edit").click(function(e) {
             e.preventDefault();
             
-            $(".popup iframe").attr("src", self.$scope.settings.redmineURI + "issues/" + id);
-            $(".popup").fadeIn("fast");
+            $(".task-advanced-edit iframe").attr("src", self.$scope.settings.redmineURI + "issues/" + id);
+            $(".task-advanced-edit").fadeIn("fast");
         });
         
         this.movePositionPopover(id);
@@ -463,11 +459,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     }
     
     Kanbam.prototype.hideEditTask = function() {
-        $(".popupTaskDetail").fadeOut("fast");
+        $(".detail").fadeOut("fast");
     }
     
     Kanbam.prototype.movePositionPopover = function( id ) {
-        var pop = $(".popupTaskDetail");
+        var pop = $(".detail");
         var post = $("#post" + id);
         var stories = $(".stories");
         var posXPop, posYPop = 0;
@@ -498,7 +494,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             left : posXPop
         });
         
-        $(".popupTaskDetail .arrow").offset({
+        $(".detail .arrow").offset({
             top : post.offset().top + ( post.height() / 2 ) - 10
         });
         
@@ -506,31 +502,31 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     }
     
     Kanbam.prototype.updateTaskDetail = function( id ) {
-        if ( $(".popover #taskNameEdit").val().trim() == "" ) {
-            $(".popover #taskNameEdit").parent().parent().addClass("error");
+        if ( $(".detail-task-name").val().trim() == "" ) {
+            $(".detail-task-name").parent().parent().addClass("error");
             
             return false;
         } else {
-            $(".popover #taskNameEdit").parent().parent().removeClass("error");
+            $(".detail-task-name").parent().parent().removeClass("error");
         }
         
         if ( 
-            ( isNaN( $(".popover #taskEstimatedHours").val()) ) ||
-            ( parseFloat($(".popover #taskEstimatedHours").val() ) < 0 ) 
+            ( isNaN( $(".detail-estimated").val()) ) ||
+            ( parseFloat($(".detail-estimated").val() ) < 0 ) 
         ) {
-            $(".popover #taskEstimatedHours").parent().parent().addClass("error");
+            $(".detail-estimated").parent().parent().addClass("error");
             
             return false;
         } else {
-            $(".popover #taskEstimatedHours").parent().parent().removeClass("error");
+            $(".detail-estimated").parent().parent().removeClass("error");
         }
         
-        $(".popover").slideUp("fast");
+        $(".detail").slideUp("fast");
         
         self.$scope.tool.updateTask({
             id : id, 
-            name : $(".popover #taskNameEdit").val(), 
-            estimated : Number( $(".popover #taskEstimatedHours").val() ),
+            name : $(".detail-task-name").val(), 
+            estimated : Number( $(".detail-estimated").val() ),
             assigned_to_id : self.$scope.editTask.assigned_to_id, 
             assigned_to_name : self.$scope.editTask.assigned_to_name 
         });
@@ -547,9 +543,9 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
             this.hideEditTask();
             this.showEditTask( id );
             
-            $(".searchValue").select();
+            $(".search-value").select();
             
-            $('html, body').animate({ scrollTop: $(".popupTaskDetail").offset().top - headHeight - 10 }, 300);
+            $('html, body').animate({ scrollTop: $(".detail").offset().top - headHeight - 10 }, 300);
         } else {
             this.hideEditTask();
             
@@ -589,6 +585,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'tool', 'jqueryui'], functi
     }
     
     Kanbam.prototype.fixStoryCell = function() {
-        $(".content").attr("style", "width:" + parseInt( ( $(window).width() - $(".labelStory").width() ) / 3 ) + "px !important" )
+        $(".tasks-column").attr("style", "width:" + parseInt( ( $(window).width() - $(".stories-column").width() ) / 3 ) + "px !important" );
     }
 });
