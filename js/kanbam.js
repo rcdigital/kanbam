@@ -602,7 +602,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     }
     
     Kanbam.prototype.formatDate = function(date) {
-        return date.split("/")[2] + "-" + date.split("/")[0] + "-" + date.split("/")[1];
+        if ( date == "" ) {
+            return "";
+        } else {
+            return date.split("/")[2] + "-" + date.split("/")[0] + "-" + date.split("/")[1];
+        }
     }
     
     Kanbam.prototype.fixStoryCell = function() {
