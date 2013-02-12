@@ -28,7 +28,7 @@ if ( $action == "loadProjects" ) {
 } else if ( $action == "addTask" ) {
 	$client->api('issue')->create( array( 'project_id' => $_REQUEST["project_id"], 'subject' => $_REQUEST["name"], 'fixed_version_id' => $_REQUEST["story_id"], 'tracker_id' => $_REQUEST["activity_id"], 'estimated_hours' => $_REQUEST["hours"]  ) );
 } else if ( $action == "addStory" ) {
-    $client->api('version')->create( $_REQUEST["project_id"], array( 'name' => $_REQUEST["name"] ) );
+    $client->api('version')->create( $_REQUEST["project_id"], array( 'name' => $_REQUEST["name"], 'due_date' => $_REQUEST["date"] ) );
 } else if ( $action == "removeTask" ) {
     $client->api('issue')->remove( $_REQUEST["id"] );
 } else if ( $action == "removeSpentTime" ) {

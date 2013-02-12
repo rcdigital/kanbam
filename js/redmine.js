@@ -419,16 +419,18 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.kanbam.onUpdateData();
     }
     
-    Redmine.prototype.addStory = function(name) {
+    Redmine.prototype.addStory = function(story) {
         this.loadAPI({
             action : "addStory",
-            name : name,
+            name : story.name,
+            date : story.date,
             project_id : this.$scope.currentProject.id
         });
         
         this.allStories.push({
             id : "X",
-            name : name,
+            name : story.name,
+            date : story.date,
             total_estimated : 0
         });
         

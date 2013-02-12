@@ -4,6 +4,7 @@ require.config({
 		jqueryui: 'lib/jquery-ui-1.10.0.custom.min',
 		bootstrap: 'lib/bootstrap.min',
 		underscore: 'lib/underscore-min',
+		datepicker: 'lib/bootstrap-datepicker',
 		plugins: 'plugins'
 	},
 	shim: {
