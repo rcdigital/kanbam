@@ -125,8 +125,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             if ( !$(".footer .dropdown-menu").is(":visible") && !$(".datepicker").is(":visible") ) {
                 if (e.clientY >= $(window).height() - 150) {
                     if (!self.isFooterOpen) {
-                        $(".footer").stop().animate({ bottom: 0 }, 250, 'easeOutQuad' );
-                        $(".stories").animate({ marginBottom: 64 }, 250, 'easeOutQuad' );
+                        $(".footer").stop().animate({ bottom: 0 }, 150, 'easeOutQuad' );
+                        $(".stories").animate({ marginBottom: 63 }, 250, 'easeOutQuad' );
                         
                         if ( $(document).height() <= $(document).scrollTop() + $(window).height() + 64 ) {
                             $('html, body').animate({ scrollTop: 999999 }, 350);
@@ -135,8 +135,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
                     self.isFooterOpen = true;
                 } else {
                     if (self.isFooterOpen) {
-                        $(".footer").stop().animate({ bottom: -46 }, 150, 'easeOutQuad' );
-                        $(".stories").animate({ marginBottom: 0 }, 250, 'easeOutQuad' );
+                        $(".footer").stop().animate({ bottom: -46 }, 250, 'easeOutQuad' );
+                        $(".stories").animate({ marginBottom: 17 }, 150, 'easeOutQuad' );
                     }
                     self.isFooterOpen = false;
                 }
@@ -622,6 +622,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     }
     
     Kanbam.prototype.fixStoryCell = function() {
-        $(".tasks-column").attr("style", "width:" + ( Math.round( ( $(window).width() - $(".stories-column").width() ) / 3 ) - 1 ) + "px !important" );
+        var w = ( Math.round( ( $(window).width() - $(".stories-column").width() ) / 3 ) + 2 );
+        $(".tasks-column").attr("style", "min-width: " + w + " !important; width:" + w + "px !important" );
     }
 });

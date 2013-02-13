@@ -21,7 +21,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 
 /* Body */
 
-body { font-family: 'Roboto Condensed', sans-serif; }
+body { font-family: 'Roboto Condensed', sans-serif; overflow-x: hidden; }
 
 /* Project */
 
@@ -54,7 +54,7 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 
 .head { position: fixed; width: 100%; z-index: 9999; margin-top: 65px; }
 .head-table { width: 100%; background-image: url(../img/papel-rasgado.png); height:65px; }
-.head-separator { background-image: url(../img/divisor-secoes.png); background-repeat: no-repeat; background-position-y: 5px; }
+.head-separator { background-image: url(../img/divisor-secoes.png); background-repeat: no-repeat; background-position: 0 6px !important; }
 .head-stories { background-image: url(../img/pattern-sidebar.png); min-width: 210px; width: 210px; background-repeat: repeat-y;  }
 .head-tasks { min-width: 270px; }
 .head-story-title { padding-top: 11px; background-image: url(../img/separador-barra-lateral.png); background-repeat: no-repeat; background-position-y: 51px; float: left; height: 52px; width: 100%; font-size: 20px; font-weight: bold; text-transform: uppercase; color: #706c66; text-shadow: 1px 1px 1px rgba(0,0,0,.75); }
@@ -85,8 +85,8 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 
 /* Stories */
 
-.stories { margin-top: 120px; width: 100%; float: left; }
-.stories-column { background-image: url(../img/pattern-sidebar.png); min-width: 210px; width: 210px; background-repeat: repeat-y; }
+.stories { margin-top: 120px; width: 100%; float: left; margin-bottom: 17px; }
+.stories-column { background-image: url(../img/pattern-sidebar.png); min-width: 211px; width: 211px; background-repeat: repeat-y; }
 .tasks-column { background-image: url(../img/textura-papel.png); }
 .tasks-column-shadow { background-image: url(../img/textura-papel-escura.png); }
 .stories-table { width: 100%; }
@@ -103,8 +103,8 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 
 
 .stories-page-footer-middle { background-image: url(../img/paginas-empilhadas-meio.png); background-repeat: repeat-x; background-color: #333; }
-.stories-page-footer-left { float: left; margin-left: -1px; margin-top: -1px; }
-.stories-page-footer-right { float: right; margin-top: -1px; margin-right: -2px; }
+.stories-page-footer-left { float: left; margin-left: -2px; margin-top: -1px; }
+.stories-page-footer-right { float: right; margin-top: -1px; margin-right: -3px; }
 
 /* Post-it */
 
