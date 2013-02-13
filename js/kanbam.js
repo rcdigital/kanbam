@@ -264,6 +264,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.projectsEvents = function() {
         $(".project-list a").click(function(e) {
             e.preventDefault();
+            $(".loading").fadeIn("fast");
             self.$scope.tool.changeProject( $(this).attr("id") );
         });
         
@@ -355,6 +356,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             e.preventDefault();
             self.$scope.tool.removeSpentTime( $(this).attr("id") );
         });
+        
+        $(".loading").fadeOut("fast");
     }
     
     Kanbam.prototype.saveSettings = function() {
