@@ -108,7 +108,7 @@
                                 </div>
                             </td>
                             <td id="TODO" class="todo tasks-td {{isFirstStory($index)}}">
-                                <div id="post{{post.id}}" class="post-it relative post{{post.id}}" ng-repeat="post in story.todo">
+                                <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.todo">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
                                         <div class="post-it-task">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
@@ -119,7 +119,7 @@
                                 </div>
                             </td>
                             <td id="DOING" class="doing tasks-td {{isFirstStory($index)}}">
-                                <div id="post{{post.id}}" class="post-it relative post{{post.id}}" ng-repeat="post in story.doing">
+                                <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.doing">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
                                         <div class="post-it-task">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
@@ -130,7 +130,7 @@
                                 </div>
                             </td>
                             <td id="DONE" class="done tasks-td {{isFirstStory($index)}}">
-                                <div id="post{{post.id}}" class="post-it relative post{{post.id}}" ng-repeat="post in story.done">
+                                <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.done">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
                                         <div class="post-it-task">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
