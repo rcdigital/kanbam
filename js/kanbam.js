@@ -262,6 +262,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     }
     
     Kanbam.prototype.projectsEvents = function() {
+        $(".loading-icon").fadeIn("fast");
+        
         $(".project-list a").click(function(e) {
             e.preventDefault();
             $(".loading").fadeIn("fast");

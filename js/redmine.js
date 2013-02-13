@@ -81,7 +81,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             this.$scope.projects.push({
                 id : data.projects[p].id,
                 name : data.projects[p].name,
-                parent : (data.projects[p].parent != undefined) ? data.projects[p].parent.name : ""
+                parent : (data.projects[p].parent != undefined) ? data.projects[p].parent.name : "",
+                updated_on : data.projects[p].updated_on
             });
             
             if (data.projects[p].id > lastProject.id) {
@@ -95,11 +96,76 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.loadTasksByProjectId(this.$scope.currentProject.id);
         this.loadUsersByProjectId(this.$scope.currentProject.id);
+        //this.refreshUpdatedOnProjects();
         
         this.kanbam.onUpdateData();
         this.kanbam.projectsEvents();
     }
+    
+    Redmine.prototype.formatProjects = function() {
+        this.refreshUpdatedOn();
+        /*
+        var now = new Date().getTime();
         
+        for ( var i = 0; i < this.$scope.projects.length; i++ ) {
+            //console.log(this.$scope.projects[i].name);
+            //console.log(this.$scope.projects[i].updated_on);
+            //console.log(this.dateDiff( this.dateToDatetime( this.$scope.projects[i].updated_on ), now));
+            //console.log("-------------");
+        }
+        */
+    }
+    
+    Redmine.prototype.refreshUpdatedOnProjects = function() {
+        this.loadAPI({
+            action : "loadLastsTasks"
+        }, this.onLoadLastsTasks );
+        
+        /*
+        for ( var i = 0; i < this.$scope.projects.length; i++ ) {
+            for ( var j = 0; j < this.$scope.tasks.length; j++ ) {
+                if ( this.$scope.projects[ i ].id == this.$scope.tasks[ j ].project_id ) {
+                    var currentDatetime = this.dateToDatetime( this.$scope.projects[ i ].updated_on );
+                    var taskDatetime = this.dateToDatetime( this.$scope.tasks[ j ].updated_on );
+                    
+                    console.log( currentDatetime + " - " + taskDatetime );
+                }
+            }
+        }
+        */
+    }
+    
+    Redmine.prototype.onLoadLastsTasks = function(data) {
+        data.issues = _.sortBy(data.issues, function(num, key){ return key * -1; });
+        
+        for (var i in data.issues) {
+            console.log(data.issues[i].project.id);
+            console.log(this.$scope.projects[ data.issues[i].project.id ]);
+            console.log(this.$scope.projects[ data.issues[i].project.id ].updated_on);
+            //this.$scope.projects[ data.issues[i].project.id ].updated_on = data.issues[i].updated_on;
+        }
+    }
+    
+    Redmine.prototype.dateToDatetime = function(date) {
+        date = date.split("T")[0].split("-");
+        
+        var d = date[2];
+        var m = date[1];
+        var y = date[0];
+        
+        var datetime = new Date(y, m, d);
+        
+        return datetime.getTime();
+    }
+    
+    Redmine.prototype.dateDiff = function(firstDate, secondDate) {
+        var oneDay = 1000 * 60 * 60 * 24;
+        
+        //console.log( firstDate + " - " + secondDate );
+        
+        return ( secondDate - firstDate ) / oneDay;
+    }
+    
     Redmine.prototype.loadUsersByProjectId = function(id) {
         this.loadAPI({
             action : "loadUsersByProjectId",
@@ -168,7 +234,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                         status_name : this.getTaskStatus(data.issues[i]).name,
                         type : data.issues[i].tracker.id,
                         project_id : this.$scope.currentProject.id,
-                        spent_time_list : []
+                        spent_time_list : [],
+                        updated_on : data.issues[i].updated_on
                     });
                 }
                 
@@ -181,6 +248,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.reloadCount--;
         
+
         this.loadStories(this.$scope.currentProject.id);
     }
     
