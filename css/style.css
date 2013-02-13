@@ -101,7 +101,6 @@ body { font-family: 'Roboto Condensed', sans-serif; overflow-x: hidden; }
 
 .first-story { padding-top: 10px; }
 
-
 .stories-page-footer-middle { background-image: url(../img/paginas-empilhadas-meio.png); background-repeat: repeat-x; background-color: #333; height: 7px; }
 .stories-page-footer-left { float: left; margin-left: -2px; margin-top: -1px; }
 .stories-page-footer-right { float: right; margin-top: -1px; margin-right: -3px; }

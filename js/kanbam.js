@@ -91,6 +91,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             }
         }
         
+        this.$scope.getTotalTasks = function() {
+            return self.$scope.tasks.length;
+        }
+        
         this.$scope.formatVariation = function(variation) {
             if ( variation == null || variation == undefined || variation == "undefined" || isNaN( variation ) ) {
                 return 0;
