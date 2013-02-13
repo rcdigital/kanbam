@@ -244,6 +244,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         
         $(window).resize(function() {
             self.fixStoryCell();
+            self.fixStoryHeight();
         });
         
         $(".search-value").keyup(function() {
@@ -451,6 +452,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             }
         }
         
+        this.fixStoryHeight();
         this.fixStoryCell();
         this.tasksEvents();
     }
@@ -629,5 +631,12 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.fixStoryCell = function() {
         var w = ( Math.round( ( $(window).width() - $(".stories-column").width() ) / 3 ) + 2 );
         $(".tasks-column").attr("style", "min-width: " + w + " !important; width:" + w + "px !important" );
+    }
+    
+    Kanbam.prototype.fixStoryHeight = function() {
+        $(".stories-table").height(1);
+        if (  ( $(".stories-table").height() + $(".project").height() + $(".footer").height() ) < $(window).height() ) {
+            $(".stories-table").height( $(window).height() - $(".project").height() - $(".footer").height() - 9 );
+        }
     }
 });
