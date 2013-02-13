@@ -447,7 +447,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
                         revert: "invalid", 
                         containment: "document", 
                         cursor: "move", 
-                        zIndex: 1000, 
+                        zIndex: 1000,
                         drag : function(e, ui) {
                             this.currentPostIt = $(this);
                         }
@@ -638,8 +638,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     }
     
     Kanbam.prototype.fixStoryHeight = function() {
-        $(".stories-table").height(1);
-        if (  ( $(".stories-table").height() + $(".project").height() + $(".footer").height() ) < $(window).height() ) {
+        if ( ( $(".stories-table").height() + $(".project").height() + $(".footer").height() ) < $(window).height() ) {
             $(".stories-table").height( $(window).height() - $(".project").height() - $(".footer").height() - 9 );
         }
     }
