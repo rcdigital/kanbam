@@ -21,7 +21,7 @@ textarea:focus, input[type="text"]:focus, input[type="password"]:focus, input[ty
 
 /* Body */
 
-body { font-family: 'Roboto Condensed', sans-serif; overflow-x: hidden; }
+body { font-family: 'Roboto Condensed', sans-serif; }
 
 /* Project */
 
@@ -84,7 +84,7 @@ body { font-family: 'Roboto Condensed', sans-serif; overflow-x: hidden; }
 
 /* Stories */
 
-.stories { margin-top: 120px; width: 100%; float: left; margin-bottom: 17px; }
+
 .stories-column { background-image: url(../img/pattern-sidebar.png); min-width: 211px; width: 211px; background-repeat: repeat-y; }
 .tasks-column { background-image: url(../img/textura-papel.png); }
 .tasks-column-shadow { background-image: url(../img/textura-papel-escura.png); }
