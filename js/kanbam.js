@@ -126,7 +126,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         });
         
         $(window).mousemove(function(e) {
-            if ( !$(".footer .dropdown-menu").is(":visible") && !$(".datepicker").is(":visible") ) {
+            if ( !$(".dropdown-menu").is(":visible") && !$(".datepicker").is(":visible") ) {
                 if (e.clientY >= $(window).height() - 150) {
                     if (!self.isFooterOpen) {
                         $(".footer").stop().animate({ bottom: 0 }, 150, 'easeOutQuad' );
