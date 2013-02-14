@@ -568,7 +568,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         } else {
             self.$scope.tool.changeStatusTask({
                 id : id,
-                status : "TODO",
+                status : this.$scope.editTask.status_name,
                 story : this.$scope.editTask.story_id
             });
         }
