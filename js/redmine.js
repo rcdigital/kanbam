@@ -241,8 +241,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 
                 this.$scope.tasks = _.sortBy(this.$scope.tasks, function(task){ return task.id; });
             }
-        } else {
-            this.kanbam.showError("No task registered for this project.");
         }
         
         this.$scope.totalTasks = this.$scope.tasks.length;
