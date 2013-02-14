@@ -125,7 +125,7 @@
                             <td id="TODO" class="todo tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.todo">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-task {{post.impediment != false && 'post-it-impediment' || '' }}">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</a></div>
                                         <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>
@@ -136,7 +136,7 @@
                             <td id="DOING" class="doing tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.doing">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-task {{post.impediment != false && 'post-it-impediment' || '' }}">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</div>
                                         <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>
@@ -147,7 +147,7 @@
                             <td id="DONE" class="done tasks-td {{isFirstStory($index)}}">
                                 <div id="post{{post.id}}" class="post-it post{{post.id}}" ng-repeat="post in story.done">
                                     <div class="post-it-area post-it-{{formatColorPost(post.type)}}">
-                                        <div class="post-it-task">#{{post.id}}</div>
+                                        <div class="post-it-task {{post.impediment != false && 'post-it-impediment' || '' }}">#{{post.id}}</div>
                                         <div class="post-it-assigned-to">{{formatUserName(post.assigned_to_name)}}</div>
                                         <div class="post-it-name">{{post.name}}</div>
                                         <div class="post-it-hours"><i class="icon-time icon-alpha post-it-icon-estimated"></i> {{formatHour(post.estimated)}}</div>
@@ -303,6 +303,18 @@
                             <span class="help-inline">hs</span>
                         </div>
                     </div>
+                    <div class="control-group" ng-switch on="editTask.impediment">
+                        <label class="control-label" for="detail-estimated">Impediment:</label>
+                        <div class="controls" ng-switch-when="true">
+                            <input type="checkbox" class="detail-impediment" value="true" checked  />
+                            <span class="help-inline detail-impediment-help">(Check if this task is in impediment){{editTask.impediment}}</span>
+                        </div>
+                        <div class="controls" ng-switch-default>
+                            <input type="checkbox" class="detail-impediment" value="true" />
+                            <span class="help-inline detail-impediment-help">(Check if this task is in impediment){{editTask.impediment}}</span>
+                        </div>
+                    </div>
+                    
                     <hr />
                     
                     <div class="control-group">

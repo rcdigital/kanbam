@@ -235,6 +235,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                         type : data.issues[i].tracker.id,
                         project_id : this.$scope.currentProject.id,
                         spent_time_list : [],
+                        impediment : data.issues[i].status.name == "IMPEDIMENT",
                         updated_on : data.issues[i].updated_on
                     });
                 }
@@ -244,9 +245,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         }
         
         this.$scope.totalTasks = this.$scope.tasks.length;
-        
         this.reloadCount--;
-        
 
         this.loadStories(this.$scope.currentProject.id);
     }
@@ -387,9 +386,18 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         for (i = 0; i < this.$scope.tasks.length; i++) {
             if (this.$scope.tasks[ i ].id == task.id) {
-                this.$scope.tasks[ i ].status_name = task.status;
+                
                 this.$scope.tasks[ i ].story_id = Number(task.story);
                 this.$scope.tasks[ i ].story_name = this.getStoryById(task.story).name;
+                
+                if ( task.status == "IMPEDIMENT" ) {
+                    this.$scope.tasks[ i ].status_name = "TODO";
+                    this.$scope.tasks[ i ].impediment = true;
+                } else {
+                    this.$scope.tasks[ i ].status_name = task.status;
+                    this.$scope.tasks[ i ].impediment = false;
+                }
+                
                 break;
             }
         }

@@ -559,6 +559,20 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         
         $(".detail").slideUp("fast");
         
+        if ( $(".detail-impediment").is(':checked') ) {
+            self.$scope.tool.changeStatusTask({
+                id : id,
+                status : "IMPEDIMENT",
+                story : this.$scope.editTask.story_id
+            });
+        } else {
+            self.$scope.tool.changeStatusTask({
+                id : id,
+                status : "TODO",
+                story : this.$scope.editTask.story_id
+            });
+        }
+        
         self.$scope.tool.updateTask({
             id : id, 
             name : $(".detail-task-name").val(), 

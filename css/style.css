@@ -114,6 +114,7 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .post-it-hours { display: table-cell; float: right; font-size: 9px; font-weight: bold; text-align: right; padding: 1px 6px 1px 6px; margin-top: -17px; margin-right: -2px; min-width: 14px; letter-spacing: -1px;  }
 .post-it-spent { display: table-cell; float: left; font-size: 9px; font-weight: bold; text-align: right; padding: 1px 6px 1px 6px; margin-top: -17px; margin-right: -3px; min-width: 14px; letter-spacing: -1px;  }
 .post-it-task { position: absolute;  font-size: 9px; font-weight: bold; text-align: center; padding: 1px 6px 1px 6px; min-width: 14px; letter-spacing: -1px; margin-top: 4px; }
+.post-it-impediment { background-color: #C00; color: #FFF; }
 .post-it-icon-estimated { margin-top: -1px; }
 .post-it-icon-spent { margin-top: -2px; }
 
@@ -158,8 +159,10 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .detail-spent-add { float:right; margin-right:30px; width: 50px; }
 .detail-spent-error { display: none; color: red; float: left; font-size: 13px; width: 100%; }
 .detail-no-activity { text-align: center !important; }
+.detail-impediment-help { margin-top: 2px; }
 .detail .control-label { width: 100px; }
 .detail .controls { margin-left: 110px; }
+
 
 /* Loading */
 
