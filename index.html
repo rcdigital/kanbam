@@ -86,15 +86,30 @@
                 </table>
             </div>
             <div class="stories">
-                <table class="stories-table">
+                <table class="stories-table" ng-switch on="totalTasks">
                     <colgroup>
                         <col class="stories-column"/>
                         <col class="tasks-column"/>
                         <col class="tasks-column tasks-column-shadow"/>
                         <col class="tasks-column"/>
                     </colgroup>
-                    <tbody>
-                        <tr id="{{story.id}}" ng-repeat="story in stories">
+                    <tbody ng-switch-when="0">
+                        <tr>
+                            <td></td>
+                            <td colspan="3">
+                                <div class="stories-no-tasks">No task inserted</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="stories-page-footer-middle" colspan="3">
+                                <img class="stories-page-footer-left" src="img/paginas-empilhadas-esq.png" />
+                                <img class="stories-page-footer-right" src="img/paginas-empilhadas-dir.png" />
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tbody ng-switch-default>
+                        <tr id="{{story.id}}" ng-repeat="story in stories" ng-switch-default>
                             <td class="stories-td {{isFirstStory($index)}}">
                                 <div class="stories-box">
                                     <div class="stories-content">
@@ -141,14 +156,6 @@
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td></td>
-                            <td class="stories-page-footer-middle" colspan="3">
-                                <img class="stories-page-footer-left" src="img/paginas-empilhadas-esq.png" />
-                                <img class="stories-page-footer-right" src="img/paginas-empilhadas-dir.png" />
-                            </td>
-                        </tr>
-                        
                     </tbody>
                 </table>
             </div>

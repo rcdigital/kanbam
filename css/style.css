@@ -88,6 +88,7 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .stories-column { background-image: url(../img/pattern-sidebar.png); min-width: 211px; width: 211px; background-repeat: repeat-y; }
 .tasks-column { background-image: url(../img/textura-papel.png); }
 .tasks-column-shadow { background-image: url(../img/textura-papel-escura.png); }
+.stories-no-tasks { font-size: 20px; text-align: center; }
 .stories-table { width: 100%; }
 .stories-td { vertical-align: top; }
 .stories-box { width: 178px; height:137px; background-image: url(../img/story.png); margin-left: 10px; margin-top: 3px; }
