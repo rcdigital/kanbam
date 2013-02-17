@@ -26,6 +26,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.currentPostIt = -1;
         this.currentStory = 0;
         this.currentActivity = 0;
+        this.isCtrlDown = false;
+        
         this.$scope.editTask = { assigned_to_id : -1, assigned_to_name : "Select an user" };
     
         this.$scope.colors = ["", "red", "blue", "green", "purple", "orange", "gray"];
@@ -36,9 +38,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.$scope.tool = tool;
         this.$scope.tool.init(this.$scope, this);
         
-        $('.story-date').datepicker({ 
-            autoclose : true
-        });
+        $(".story-date").datepicker({ autoclose : true });
+        $(".search-value").hide();
+        $(".footer").stop().animate({ bottom: -46 }, 50, 'easeOutQuad' );
+        
+        
         
         if ( this.$scope.settings.apiKey == undefined ) {
             $(".settings").modal();
@@ -49,7 +53,36 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             this.$scope.tool.start();
         }
         
-        $(".footer").stop().animate({ bottom: -46 }, 50, 'easeOutQuad' );
+        $(window).resize(function() {
+            self.fixStoryCell();
+            self.fixStoryHeight();
+        });
+        
+        //Shortcut for search
+        $(document).keydown(function(e) {
+            if ( e.which == 17 ) {
+                this.isCtrlDown = true;
+            }
+            
+            if ( this.isCtrlDown && e.which == 70 ) {
+                $(".search-btn .btn").click();
+            }
+        });
+        
+        $(document).keyup(function(e) {
+            if ( e.which == 17 ) {
+                this.isCtrlDown = false;
+            }
+        });
+        
+        $(".search-value").keyup(function() {
+            self.search( $(this).val() ); 
+        });
+        
+        $(".search-btn .btn").click(function() {
+            $(".search-value").animate({width:'toggle'},350);
+            $(".search-value").select();
+        });
         
         this.$scope.formatHour = function(hour, isZero) {
             if ( hour == 0 || hour == undefined ) {
@@ -240,25 +273,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             $(this).hide();
             $(".detail").fadeOut("fast");
             self.$scope.tool.reload();
-        });
-        
-        $(window).resize(function() {
-            self.fixStoryCell();
-            self.fixStoryHeight();
-        });
-        
-        $(".search-value").keyup(function() {
-            self.search( $(this).val() ); 
-        });
-        
-        $(".search-btn").click(function() {
-            $(".search-box").attr("style", "margin-top:-60px");
-            $(".search-box").animate({ marginTop: 0 }, 300);
-            $(".search-value").select();
-        });
-        
-        $(".search-close-btn").click(function() {
-            $(".search-box").animate({ marginTop: -60 }, 150);
         });
     }
     
@@ -585,17 +599,21 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.search = function( keyword ) {
         if ( keyword.substring(0, 1) == "#" ) {
             var id = keyword.substring(1, keyword.length);
-            var headHeight = $(".head").height() + $(".project").height();
-        
-            $(".post-it").hide();
-            $("#post" + id).show();
             
-            this.hideEditTask();
-            this.showEditTask( id );
+            if ( $("#post" + id).attr("id") != undefined ) {
+                var headHeight = $(".head").height() + $(".project").height();
             
-            $(".search-value").select();
-            
-            $('html, body').animate({ scrollTop: $(".detail").offset().top - headHeight - 10 }, 300);
+                $(".post-it").hide();
+                $("#post" + id).show();
+                
+                
+                this.hideEditTask();
+                this.showEditTask( id );
+                
+                $(".search-value").select();
+                
+                $('html, body').animate({ scrollTop: $(".detail").offset().top - headHeight - 10 }, 300);
+            }
         } else {
             this.hideEditTask();
             

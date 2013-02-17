@@ -22,11 +22,6 @@
             <h4>Error</h4>
             <span class="alert-message">This project don't have any members.</span>
         </div>
-        <div class="search-box">
-            <form class="form-horizontal">
-                <input type="text" placeholder="Type your keyword" class="search-value" /><button class="btn btn-primary search-close-btn" type="button"><i class="icon-remove icon-white"></i></button>
-            </form>
-        </div>
         <div class="main">
             <div class="project">
                 <div class="project-title">{{currentProject.name}}</div>
@@ -70,7 +65,11 @@
                             <button class="btn button" type="button"><i class="icon-cog icon-white-alpha"></i></button>
                         </div>
                         <div class="search-btn">
-                            <button class="btn button" type="button"><i class="icon-search icon-white-alpha"></i></button>
+                            <form class="form-horizontal">
+                                <input type="text" placeholder="Type your keyword" class="input search-value" />
+                                <button class="btn button" type="button"><i class="icon-search icon-white-alpha"></i></button>
+                            </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -154,6 +153,13 @@
                                         <div class="post-it-spent">{{formatHour(post.spent_time)}} <i class='{{post.spent_time != 0 && "icon-ok icon-alpha post-it-icon-spent" || "" }}'></i></div>
                                     </div>
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td class="stories-page-footer-middle" colspan="3">
+                                <img class="stories-page-footer-left" src="img/paginas-empilhadas-esq.png" />
+                                <img class="stories-page-footer-right" src="img/paginas-empilhadas-dir.png" />
                             </td>
                         </tr>
                     </tbody>
