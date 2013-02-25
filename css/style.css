@@ -42,8 +42,8 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .project-bar-todo { background-color: #ff7778; background-image: -webkit-linear-gradient(top, #f3babb, #e25859); background-image: -moz-linear-gradient(top, #f3babb, #e25859); background-image: -o-linear-gradient(top, #f3babb, #e25859); background-image: -ms-linear-gradient(top, #f3babb, #e25859); background-image: linear-gradient(to bottom, #f3babb, #e25859); }
 .project-bar-doing {background-color: #e6c47a; background-image: -webkit-linear-gradient(top, #e8dbba, #ba9353); background-image: -moz-linear-gradient(top, #e8dbba, #ba9353); background-image: -o-linear-gradient(top, #e8dbba, #ba9353); background-image: -ms-linear-gradient(top, #e8dbba, #ba9353); background-image: linear-gradient(to bottom, #e8dbba, #ba9353); }
 .project-bar-done { background-color: #6ed070; background-image: -webkit-linear-gradient(top, #b0dcb1, #449a45); background-image: -moz-linear-gradient(top, #b0dcb1, #449a45); background-image: -o-linear-gradient(top, #b0dcb1, #449a45); background-image: -ms-linear-gradient(top, #b0dcb1, #449a45); background-image: linear-gradient(to bottom, #b0dcb1, #449a45); }
-.settings-btn { float: left; margin-top: 11px; margin-left: 10px; }
-.search-btn { float: left; margin-top: 11px; margin-left: 10px; margin-right: 10px; }
+.settings-btn { float: left; margin-top: 11px; margin-left: 10px; margin-right: 10px; }
+.search-btn { float: left; margin-top: 11px; margin-left: 10px; }
 
 .indicator-success { border-color: #002709 !important; background-color: rgba(119, 180, 96, .4) !important; }
 .indicator-attention { border-color: #281E00 !important; background-color: rgba(255, 201, 38, .4) !important; }
@@ -86,7 +86,7 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 
 /* Stories */
 
-.stories { margin-top: 120px; width: 100%; float: left; margin-bottom: 17px; }
+.stories { margin-top: 120px; width: 100%; float: left; }
 .stories-column { background-image: url(../img/pattern-sidebar.png); min-width: 211px; width: 211px; background-repeat: repeat-y; }
 .tasks-column { background-image: url(../img/textura-papel.png); }
 .tasks-column-shadow { background-image: url(../img/textura-papel-escura.png); }
@@ -139,6 +139,14 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 .settings { z-index: 100001; }
 .settings-title { font-size: 20px; font-weight: 600; }
 .settings .btn-group > .btn:first-child { width: 260px; text-align: left; }
+.settings-list-projects { display: none; margin-top: 10px; height: 130px; width:273px; overflow-y: scroll; border: 1px solid #ccc; padding: 5px; -webkit-border-radius: 5px !important; -moz-border-radius: 5px !important; border-radius: 5px !important; }
+.settings-list-projects label { font-size: 12px; margin-bottom: 0px !important; }
+.settings-list-projects input { top:-4px; float:left; margin-left: 16px; margin-right: 4px; }
+.settings-parent { font-weight: bold; }
+.settings-parent input { margin-left: 0px !important; }
+.settings-view-mode { display: none; }
+.settings .modal-body-default { height: 280px; }
+.settings .modal-body-open { height: auto; }
 
 /* Task Detail */
 

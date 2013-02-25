@@ -61,15 +61,14 @@
                                 </ul>
                             </div>
                         </div>
-                        <div class="settings-btn">
-                            <button class="btn button" type="button"><i class="icon-cog icon-white-alpha"></i></button>
-                        </div>
                         <div class="search-btn">
                             <form class="form-horizontal">
                                 <input type="text" placeholder="Type your keyword" class="input search-value" />
                                 <button class="btn button" type="button"><i class="icon-search icon-white-alpha"></i></button>
                             </form>
-                            
+                        </div>
+                        <div class="settings-btn">
+                            <button class="btn button" type="button"><i class="icon-cog icon-white-alpha"></i></button>
                         </div>
                     </div>
                 </div>
@@ -242,12 +241,12 @@
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                     <span class="settings-title">Kanb.am Settings</span>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body modal-body-default">
                     <form class="form-horizontal">
                         <div class="control-group">
-                            <label class="control-label" for="inputEmail">Choose a Tool:</label>
+                            <label class="control-label">Choose a Tool:</label>
                             <div class="controls">
-                                <div class="btn-group toolOptions">
+                                <div class="btn-group tool-options">
                                     <button class="btn btn-label">Redmine</button>
                                     <button class="btn dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
@@ -270,6 +269,31 @@
                             <div class="controls">
                                 <input type="text" class="api-key input-xlarge" id="api-key" placeholder="Paste your API Key here" value=""><br />
                                 <span class="help-inline">Ex: 62de4539a7d9a370afad56cdf20177235ef34374</span>
+                            </div>
+                        </div>
+                        <div class="control-group settings-view-mode">
+                            <label class="control-label">View mode:</label>
+                            <div class="controls">
+                                <div class="btn-group">
+                                    <button class="btn btn-label view-mode-label">User mode</button>
+                                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a id="user" href="#">User mode</a></li>
+                                        <li><a id="presentation" href="#">Presentation mode</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="controls settings-list-projects">
+                                <div ng-repeat="project in projects" ng-switch on="project.parent">
+                                    <label class="settings-parent" ng-switch-when="">
+                                        <input id="project{{project.id}}" type="checkbox" value="{{project.id}}" /> {{project.name}}
+                                    </label>
+                                    <label ng-switch-default>
+                                        <input id="project{{project.id}}" type="checkbox" value="{{project.id}}" /> {{project.name}}
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </form>

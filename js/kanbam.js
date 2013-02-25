@@ -4,7 +4,7 @@
 * http://www.apache.org/licenses/LICENSE-2.0.txt
 */
 
-define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jqueryui'], function($, plugins, exports, bootstrap, datepicker, tool, jqueryui){
+define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jqueryui', 'presentation'], function($, plugins, exports, bootstrap, datepicker, tool, jqueryui, presentation){
     var self;
 
     exports.init = function($scope) {
@@ -37,12 +37,13 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         
         this.$scope.tool = tool;
         this.$scope.tool.init(this.$scope, this);
-        
+
+        this.$scope.presentation = presentation;
+        this.$scope.presentation.init(this.$scope);
+
         $(".story-date").datepicker({ autoclose : true });
         $(".search-value").hide();
         $(".footer").stop().animate({ bottom: -46 }, 50, 'easeOutQuad' );
-        
-        
         
         if ( this.$scope.settings.apiKey == undefined ) {
             $(".settings").modal();
@@ -155,25 +156,27 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         });
         
         $(window).mousemove(function(e) {
-            if ( !$(".dropdown-menu").is(":visible") && !$(".datepicker").is(":visible") && !$(".detail").is(":visible") ) {
-                if (e.clientY >= $(window).height() - 150) {
-                    if (!self.isFooterOpen) {
-                        $(".footer").stop().animate({ bottom: 0 }, 150, 'easeOutQuad' );
-                        $(".stories").animate({ marginBottom: 63 }, 250, 'easeOutQuad' );
-                        
-                        if ( $(document).height() <= $(document).scrollTop() + $(window).height() + 64 ) {
-                            $('html, body').animate({ scrollTop: 999999 }, 350);
+            if ( !self.isPresentationMode() ) {
+                if ( !$(".dropdown-menu").is(":visible") && !$(".datepicker").is(":visible") && !$(".detail").is(":visible") ) {
+                    if (e.clientY >= $(window).height() - 150) {
+                        if (!self.isFooterOpen) {
+                            $(".footer").stop().animate({ bottom: 0 }, 150, 'easeOutQuad' );
+                            $(".stories").animate({ marginBottom: 63 }, 250, 'easeOutQuad' );
+                            
+                            if ( $(document).height() <= $(document).scrollTop() + $(window).height() + 64 ) {
+                                $('html, body').animate({ scrollTop: 999999 }, 350);
+                            }
                         }
+                        self.isFooterOpen = true;
+                    } else {
+                        if (self.isFooterOpen) {
+                            $(".footer").stop().animate({ bottom: -46 }, 250, 'easeOutQuad' );
+                            $(".stories").animate({ marginBottom: 17 }, 150, 'easeOutQuad' );
+                        }
+                        self.isFooterOpen = false;
                     }
-                    self.isFooterOpen = true;
-                } else {
-                    if (self.isFooterOpen) {
-                        $(".footer").stop().animate({ bottom: -46 }, 250, 'easeOutQuad' );
-                        $(".stories").animate({ marginBottom: 17 }, 150, 'easeOutQuad' );
-                    }
-                    self.isFooterOpen = false;
                 }
-            }
+            } 
         });
         
         $("#new-task-form").submit(function() {
@@ -278,6 +281,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     
     Kanbam.prototype.projectsEvents = function() {
         $(".loading-icon").fadeIn("fast");
+        $(".settings-view-mode").slideDown("fast");
         
         $(".project-list a").click(function(e) {
             e.preventDefault();
@@ -289,6 +293,12 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             e.preventDefault();
             $(".task-activity-label").html( $(this).html() );
             self.currentActivity = $(this).attr("id");
+        });
+        
+        $(".settings-view-mode a").click(function(e) {
+            e.preventDefault();
+            $(".view-mode-label").html( $(this).html() );
+            self.changeViewMode( $(this).attr("id") );
         });
     }
     
@@ -368,6 +378,20 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.spentTimeEvents();
     }
     
+    Kanbam.prototype.changeViewMode = function(mode) {
+        if ( mode == "presentation" ) {
+            self.$scope.presentation.getSavedProjects();
+
+            $(".settings-list-projects").slideDown("fast");
+            $(".modal-body").removeClass("modal-body-default");
+            $(".modal-body").addClass("modal-body-open");
+        } else {
+            $(".settings-list-projects").slideUp("fast");
+            $(".modal-body").removeClass("modal-body-open");
+            $(".modal-body").addClass("modal-body-default");
+        }
+    }
+    
     Kanbam.prototype.spentTimeEvents = function() {
         $(".detail-spent-remove").click(function(e){
             e.preventDefault();
@@ -380,7 +404,9 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.saveSettings = function() {
         var redmineURI = $(".redmine-uri");
         var apiKey = $(".api-key");
-    
+        var viewMode = $(".settings-view-mode");
+        var viewModeLabel = $(".view-mode-label").html();
+
         if (redmineURI.val() == "") {
             redmineURI.parent().parent().addClass("error");
             redmineURI.parent().find(".help-inline").slideDown("fast");
@@ -404,10 +430,23 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         self.$scope.settings.apiKey     = apiKey.val();
         self.$scope.settings.redmineURI = redmineURI.val();
         self.$scope.settings.tool       = "redmine";
-        
+
         $.cookie("apiKey", self.$scope.settings.apiKey);
         $.cookie("redmineURI", self.$scope.settings.redmineURI);
         $.cookie("tool", self.$scope.settings.tool);
+        
+        if ( viewModeLabel != "User mode" ) {
+            self.$scope.settings.viewMode = viewModeLabel;
+            $.cookie("viewMode", viewModeLabel);
+
+            if ( viewModeLabel == "Presentation mode" ) {
+                self.$scope.presentation.saveProjects();
+                self.$scope.presentation.play();
+                $(".stories").attr("style", "margin-bottom:0px;");
+            }
+        } else {
+            viewMode.addClass("error");
+        }
         
         $(".settings").modal("hide");
         
@@ -469,6 +508,9 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.fixStoryHeight();
         this.fixStoryCell();
         this.tasksEvents();
+
+        $("html, body").scrollTop(0);
+        $("html, body").animate({ scrollTop : $("html, body").height() }, 20000 ); 
     }
     
     Kanbam.prototype.doubleClickPostIt = function(e) {
@@ -668,6 +710,14 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.fixStoryHeight = function() {
         if ( ( $(".stories-table").height() + $(".project").height() + $(".footer").height() ) < $(window).height() ) {
             $(".stories-table").height( $(window).height() - $(".project").height() - $(".footer").height() - 9 );
+        }
+    }
+    
+    Kanbam.prototype.isPresentationMode = function() {
+        if ( this.$scope.settings.viewMode == "Presentation mode" ) {
+            return true;
+        } else {
+            return false;
         }
     }
 });
