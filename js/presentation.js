@@ -4,7 +4,7 @@
 * http://www.apache.org/licenses/LICENSE-2.0.txt
 */
 
-define(['jquery', 'exports', 'plugins', 'localData'], function($, exports, plugins, localData){
+define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     var self;
 
     exports.init = function($scope) {

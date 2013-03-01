@@ -11,7 +11,6 @@ require.config({
 		bootstrap: 'lib/bootstrap.min',
 		underscore: 'lib/underscore-min',
 		datepicker: 'lib/bootstrap-datepicker',
-        localData: 'lib/jquery.local.data',
 		plugins: 'plugins',
 		presentation: 'presentation'
 	},
