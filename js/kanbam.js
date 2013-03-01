@@ -40,6 +40,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
 
         this.$scope.presentation = presentation;
         this.$scope.presentation.init(this.$scope);
+        this.$scope.presentation.getSavedProjects();
 
         $(".story-date").datepicker({ autoclose : true });
         $(".search-value").hide();
@@ -397,8 +398,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             e.preventDefault();
             self.$scope.tool.removeSpentTime( $(this).attr("id") );
         });
-        
-        $(".loading").fadeOut("fast");
     }
     
     Kanbam.prototype.saveSettings = function() {
@@ -509,8 +508,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.fixStoryCell();
         this.tasksEvents();
 
-        $("html, body").scrollTop(0);
-        $("html, body").animate({ scrollTop : $("html, body").height() }, 20000 ); 
+        $(".loading").fadeOut("fast");
+        self.$scope.presentation.play();
     }
     
     Kanbam.prototype.doubleClickPostIt = function(e) {
