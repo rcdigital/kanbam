@@ -27,6 +27,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.currentStory = 0;
         this.currentActivity = 0;
         this.isCtrlDown = false;
+        this.isPlaying = true;
         
         this.$scope.editTask = { assigned_to_id : -1, assigned_to_name : "Select an user" };
     
@@ -144,6 +145,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
                 return "";
             }
         }
+
+        $(".project-action").click(function() {
+            self.togglePresentationAction();
+        });
     }
     
     Kanbam.prototype.startEvents = function() {
@@ -319,6 +324,12 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             e.preventDefault();
             self.changeViewMode( $(this).attr("id") );
         });
+
+        if ( self.isPresentationMode() ) {
+            $(".project-action").show();
+        } else {
+            $(".project-action").hide();
+        }
     }
     
     Kanbam.prototype.tasksEvents = function() {
@@ -741,5 +752,18 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         } else {
             return false;
         }
+    }
+
+    Kanbam.prototype.togglePresentationAction = function() {
+        if ( this.isPlaying == true ) {
+            this.$scope.presentation.pause();
+            $(".project-action i").removeClass("icon-pause");
+            $(".project-action i").addClass("icon-play");
+        } else {
+            this.$scope.presentation.play();
+            $(".project-action i").removeClass("icon-play");
+            $(".project-action i").addClass("icon-pause");
+        }
+        this.isPlaying = !this.isPlaying;
     }
 });

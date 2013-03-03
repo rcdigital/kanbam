@@ -26,7 +26,8 @@ body { font-family: 'Roboto Condensed', sans-serif; }
 /* Project */
 
 .project { position: fixed; width: 100%; z-index: 99999; background-image: url(../img/topo-pattern.png); height: 65px; display: table; }
-.project-title { position:absolute; width:100%; margin-left: 10px; margin-top: 14px; font-size: 20px; font-weight: bold; text-transform: uppercase; color: #706c66; text-shadow: 1px 1px 1px rgba(0,0,0,.75); }
+.project-action { float:left; margin-top:-3px; margin-right: 8px; }
+.project-title { position:absolute; width:100%; margin-left:8px; margin-top: 14px; font-size: 20px; font-weight: bold; text-transform: uppercase; color: #706c66; text-shadow: 1px 1px 1px rgba(0,0,0,.75); }
 .project-title-mask { float: left; }
 .project-right { position: absolute; right:0px; }
 .project-right-content { float:left; background-image: url(../img/topo-pattern.png); height: 45px; }
