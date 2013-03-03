@@ -10,7 +10,7 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     exports.init = function($scope) {
         $scope.presentation = new Presentation($scope);
         $scope.presentation.start();
-        $scope.presentation.intervalTime = 10000;
+        $scope.presentation.intervalTime = 120000;
         self = $scope.presentation;
     }
     
