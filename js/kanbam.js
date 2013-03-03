@@ -40,7 +40,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
 
         this.$scope.presentation = presentation;
         this.$scope.presentation.init(this.$scope);
-        this.$scope.presentation.getSavedProjects();
 
         $(".story-date").datepicker({ autoclose : true });
         $(".search-value").hide();
@@ -151,8 +150,18 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.isFooterOpen = false;
     
         $(".save-settings").click( this.saveSettings );
+        $(".close-settings").click( function() {
+            if ( self.isPresentationMode() ) {
+                self.$scope.presentation.play();
+            
+                self.changeViewMode( "presentation" );
+            } else {
+                self.changeViewMode( "user" );
+            }
+        });
          
         $(".settings-btn").click( function() {
+            self.$scope.presentation.pause();
             $(".settings").modal();
         });
         
@@ -283,10 +292,20 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.projectsEvents = function() {
         $(".loading-icon").fadeIn("fast");
         $(".settings-view-mode").slideDown("fast");
+
+        this.$scope.presentation.getSavedProjects();
         
+        self.$scope.settings.viewMode = $.cookie("viewMode");
+
+        if ( self.$scope.settings.viewMode == "Presentation mode" ) {
+            self.$scope.presentation.play();
+            self.changeViewMode("presentation");
+        }
+
         $(".project-list a").click(function(e) {
             e.preventDefault();
-            $(".loading").fadeIn("fast");
+            $(".loading").show();
+
             self.$scope.tool.changeProject( $(this).attr("id") );
         });
         
@@ -298,7 +317,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         
         $(".settings-view-mode a").click(function(e) {
             e.preventDefault();
-            $(".view-mode-label").html( $(this).html() );
             self.changeViewMode( $(this).attr("id") );
         });
     }
@@ -383,10 +401,16 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         if ( mode == "presentation" ) {
             self.$scope.presentation.getSavedProjects();
 
+            $(".view-mode-label").html( "Presentation mode" );
+            $(".footer").hide();
+
             $(".settings-list-projects").slideDown("fast");
             $(".modal-body").removeClass("modal-body-default");
             $(".modal-body").addClass("modal-body-open");
         } else {
+            $(".view-mode-label").html( "User mode" );
+            $(".footer").show();
+            
             $(".settings-list-projects").slideUp("fast");
             $(".modal-body").removeClass("modal-body-open");
             $(".modal-body").addClass("modal-body-default");
@@ -434,19 +458,16 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         $.cookie("redmineURI", self.$scope.settings.redmineURI);
         $.cookie("tool", self.$scope.settings.tool);
         
-        if ( viewModeLabel != "User mode" ) {
-            self.$scope.settings.viewMode = viewModeLabel;
-            $.cookie("viewMode", viewModeLabel);
+        self.$scope.settings.viewMode = viewModeLabel;
+        $.cookie("viewMode", viewModeLabel);
 
-            if ( viewModeLabel == "Presentation mode" ) {
-                self.$scope.presentation.saveProjects();
-                self.$scope.presentation.play();
-                $(".stories").attr("style", "margin-bottom:0px;");
-            }
+        if ( viewModeLabel == "User mode" ) {
+            self.$scope.presentation.pause();
         } else {
-            viewMode.addClass("error");
+            self.$scope.presentation.saveProjects();
+            $(".stories").attr("style", "margin-bottom:0px;");
         }
-        
+
         $(".settings").modal("hide");
         
         self.$scope.tool.start();
@@ -508,8 +529,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.fixStoryCell();
         this.tasksEvents();
 
-        $(".loading").fadeOut("fast");
-        self.$scope.presentation.play();
+        $(".loading").hide(0, function() {
+            if ( self.isPresentationMode() ) {
+                self.$scope.presentation.play();
+            }
+        });
     }
     
     Kanbam.prototype.doubleClickPostIt = function(e) {
@@ -533,7 +557,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         $(".detail").show();
         
         $(".detail-spent-activities .btn-label").html( "Select an activity" );
-        
         $(".detail-spent-hours").val("");
         $(".detail-spent-hours").focus();
         

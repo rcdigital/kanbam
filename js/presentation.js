@@ -10,7 +10,7 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     exports.init = function($scope) {
         $scope.presentation = new Presentation($scope);
         $scope.presentation.start();
-        $scope.presentation.intervalTime = 60000;
+        $scope.presentation.intervalTime = 10000;
         self = $scope.presentation;
     }
     
@@ -43,25 +43,22 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
 
     Presentation.prototype.saveProjects = function() {
         var self = this;
-
-        $(".footer").hide();
+        self.selectedProjects = [];
 
         $(".settings-list-projects input:checkbox:checked").each( function() {
             self.selectedProjects.push( $(this).val() );
         });
 
         $.cookie("presentationProjects", self.selectedProjects.toString());
-        console.log("-" + $.cookie("presentationProjects"));
     }
     
     Presentation.prototype.play = function() {
         var self = this;
         
-        console.log("entrou222");
-
-        $("html, body").scrollTop(0);
+        $("body").stop();
+        $("body").scrollTop(0);
         $("body").delay(2000).animate({ 
-            scrollTop : $("html, body").height() - $(window).height() 
+            scrollTop : $("html").height() - $(window).height() 
         }, 
         { 
             duration : self.$scope.presentation.intervalTime, 
@@ -71,14 +68,13 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     }
     
     Presentation.prototype.pause = function() {
-        
+        $(window).scrollTop(0);
+        $("body").stop();    
     }
     
     Presentation.prototype.nextProject = function() {
         self.currentProject++;
         
-        console.log("entrou");
-
         if (self.currentProject >= self.selectedProjects.length ) {
             self.currentProject = 0;
         }
@@ -86,8 +82,7 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     }
     
     Presentation.prototype.gotoProject = function( id ) {
-        console.log( id );
-        $(".loading").fadeIn("fast");
+        $(".loading").show();
         this.$scope.tool.changeProject( id );
     }
 });
