@@ -96,6 +96,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             this.$scope.currentProject = lastProject;
         }
         
+        this.$scope.tasks = [];
+        this.totalLoadTasks = 0;
         this.loadTasksByProjectId(this.$scope.currentProject.id);
         this.loadUsersByProjectId(this.$scope.currentProject.id);
         
@@ -147,8 +149,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     }
     
     Redmine.prototype.loadTasksByProjectId = function(id, offset) {
-        this.$scope.tasks = [];
-
         if ( offset == undefined ) {
             offset = 0;
         }
@@ -185,6 +185,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.totalLoadTasks += data.issues.length;
 
+        console.log(this.totalLoadTasks);
         if ( this.totalLoadTasks < data.total_count ) {
             this.loadTasksByProjectId( this.$scope.currentProject.id, this.totalLoadTasks );
         } else {
