@@ -415,7 +415,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
 
             $(".view-mode-label").html( "Presentation mode" );
             $(".footer").hide();
-            $("body").css("overflow", "hidden");
+            //$("body").css("overflow", "hidden");
 
             $(".settings-list-projects").slideDown("fast");
             $(".modal-body").removeClass("modal-body-default");
@@ -424,7 +424,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             $(".view-mode-label").html( "User mode" );
             $(".footer").show();
             self.$scope.presentation.pause();
-            $("body").css("overflow", "auto");
+            //$("body").css("overflow", "auto");
             
             $(".settings-list-projects").slideUp("fast");
             $(".modal-body").removeClass("modal-body-open");

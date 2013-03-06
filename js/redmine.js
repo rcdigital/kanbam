@@ -185,7 +185,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.totalLoadTasks += data.issues.length;
 
-        console.log(this.totalLoadTasks);
         if ( this.totalLoadTasks < data.total_count ) {
             this.loadTasksByProjectId( this.$scope.currentProject.id, this.totalLoadTasks );
         } else {
