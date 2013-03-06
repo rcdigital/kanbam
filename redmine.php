@@ -14,7 +14,8 @@ if ( $action == "loadProjects" ) {
 } else if ( $action == "loadTasksByProjectId" ) {
 	echo json_encode( $client->api('issue')->all(array(
 	   'project_id' => $_REQUEST["id"], 
-	   'limit' => '9999'
+       'limit' => '9999',
+       'offset' => $_REQUEST["offset"]
     )));
 } else if ( $action == "changeStatusTask" ) {
 	$client->api('issue')->update($_REQUEST["id"], array( 
