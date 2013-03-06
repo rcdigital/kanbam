@@ -62,7 +62,7 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
         
         setTimeout( function() {
             self.functionInterval = setInterval( function() {
-                self.countInterval += 1;
+                self.countInterval += 10;
 
                 $("body").scrollTop( self.countInterval );
 
