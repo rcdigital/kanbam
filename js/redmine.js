@@ -147,6 +147,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     }
     
     Redmine.prototype.loadTasksByProjectId = function(id, offset) {
+        this.$scope.tasks = [];
+
         if ( offset == undefined ) {
             offset = 0;
         }
