@@ -10,15 +10,17 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     exports.init = function($scope) {
         $scope.presentation = new Presentation($scope);
         $scope.presentation.start();
-        $scope.presentation.intervalTime = 10000;
         self = $scope.presentation;
     }
-    
+
     var Presentation = function($scope) {
         this.$scope = $scope;
         this.self = this;
         this.currentProject = 0;
-        
+        this.countInterval = 0;
+        this.isInterval = false;
+        this.functionInterval = 0;
+
         this.selectedProjects = [];
     }
     
@@ -44,6 +46,7 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     Presentation.prototype.saveProjects = function() {
         var self = this;
         self.selectedProjects = [];
+        self.countInterval = 0;
 
         $(".settings-list-projects input:checkbox:checked").each( function() {
             self.selectedProjects.push( $(this).val() );
@@ -51,30 +54,39 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
 
         $.cookie("presentationProjects", self.selectedProjects.toString());
     }
-    
+
     Presentation.prototype.play = function() {
-        var self = this;
+        self.isInterval = true;
+
+        clearInterval(self.functionInterval);
         
-        $("body").stop();
-        $("body").scrollTop(0);
-        $("body").delay(2000).animate({ 
-            scrollTop : $("html").height() - $(window).height() 
-        }, 
-        { 
-            duration : self.$scope.presentation.intervalTime, 
-            complete : self.nextProject,
-            easing : "linear"
-        });
+        setTimeout( function() {
+            self.functionInterval = setInterval( function() {
+                self.countInterval += 1;
+
+                $("body").scrollTop( self.countInterval );
+
+                var scrollPosition = $("body").scrollTop();
+                var scrollHeight = $("html").height() - $(window).height();
+
+                if ( scrollPosition == scrollHeight ) {
+                    clearInterval(self.functionInterval); 
+                    setTimeout( function() {
+                        self.nextProject();
+                    }, 3000 );
+                }
+            }, 50 );
+        }, 3000 );
     }
     
     Presentation.prototype.pause = function() {
-        $(window).scrollTop(0);
-        $("body").stop();    
+        clearInterval(self.functionInterval);
     }
     
     Presentation.prototype.nextProject = function() {
         self.currentProject++;
-        
+        self.countInterval = 0;
+
         if (self.currentProject >= self.selectedProjects.length ) {
             self.currentProject = 0;
         }

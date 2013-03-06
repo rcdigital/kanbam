@@ -156,12 +156,10 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     
         $(".save-settings").click( this.saveSettings );
         $(".close-settings").click( function() {
+            $(".loading").hide();
+
             if ( self.isPresentationMode() ) {
                 self.$scope.presentation.play();
-            
-                self.changeViewMode( "presentation" );
-            } else {
-                self.changeViewMode( "user" );
             }
         });
          
@@ -303,8 +301,9 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         self.$scope.settings.viewMode = $.cookie("viewMode");
 
         if ( self.$scope.settings.viewMode == "Presentation mode" ) {
-            self.$scope.presentation.play();
             self.changeViewMode("presentation");
+        } else {
+            self.changeViewMode("user");
         }
 
         $(".project-list a").click(function(e) {
@@ -409,11 +408,14 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     }
     
     Kanbam.prototype.changeViewMode = function(mode) {
+        $(".loading").show();
+
         if ( mode == "presentation" ) {
             self.$scope.presentation.getSavedProjects();
 
             $(".view-mode-label").html( "Presentation mode" );
             $(".footer").hide();
+            $("body").css("overflow", "hidden");
 
             $(".settings-list-projects").slideDown("fast");
             $(".modal-body").removeClass("modal-body-default");
@@ -421,6 +423,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         } else {
             $(".view-mode-label").html( "User mode" );
             $(".footer").show();
+            self.$scope.presentation.pause();
+            $("body").css("overflow", "auto");
             
             $(".settings-list-projects").slideUp("fast");
             $(".modal-body").removeClass("modal-body-open");
@@ -541,6 +545,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.tasksEvents();
 
         $(".loading").hide(0, function() {
+            $("body").scrollTop(0);
             if ( self.isPresentationMode() ) {
                 self.$scope.presentation.play();
             }
@@ -742,7 +747,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     
     Kanbam.prototype.fixStoryHeight = function() {
         if ( ( $(".stories-table").height() + $(".project").height() + $(".footer").height() ) < $(window).height() ) {
-            $(".stories-table").height( $(window).height() - $(".project").height() - $(".footer").height() - 9 );
+            $(".stories-table").height( $(window).height() - $(".project").height() - $(".footer").height() + 9 );
         }
     }
     
