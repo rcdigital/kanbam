@@ -113,20 +113,36 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     }
     
     Redmine.prototype.onLoadUsersByProjectId = function(data) {
-        console.log(data);
+        this.$scope.currentProject.memberships = [];
+
         if ( data != null ) {
-            this.$scope.currentProject.memberships = [];
-            
             for ( m in data.memberships ) {
                 this.$scope.currentProject.memberships.push( data.memberships[ m ].user );
             }
             
             this.kanbam.onUpdateData();
         } else {
-            this.kanbam.showError("No members registered for this project.");
+            this.loadCurrentUser();
         }
     }
+
+    Redmine.prototype.loadCurrentUser = function() {
+        this.loadAPI({
+            action : "loadCurrentUser"
+        }, this.onLoadCurrentUser);
+    }
     
+    Redmine.prototype.onLoadCurrentUser = function(data) {
+        if ( data != null ) {
+            this.$scope.currentProject.memberships.push({
+                name : data.user.firstname + " " + data.user.lastname,
+                id : data.user.id
+            });
+
+            this.kanbam.onUpdateData();
+        }
+    }
+
     Redmine.prototype.getProjectById = function(id) {
         for (var i = 0; i < this.$scope.projects.length; i++) {
             if (this.$scope.projects[i].id == id) {
