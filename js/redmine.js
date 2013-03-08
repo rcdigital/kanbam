@@ -113,6 +113,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     }
     
     Redmine.prototype.onLoadUsersByProjectId = function(data) {
+        console.log(data);
         if ( data != null ) {
             this.$scope.currentProject.memberships = [];
             

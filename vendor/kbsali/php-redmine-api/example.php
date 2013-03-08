@@ -48,6 +48,7 @@ $client->api('project')->remove(4);
 // Users
 $client->api('user')->all();
 $client->api('user')->listing();
+$client->api('user')->getCurrentUser();
 $client->api('user')->getIdByUsername('kbsali');
 $client->api('user')->show(3);
 $client->api('user')->update(3, array(
@@ -80,6 +81,10 @@ $client->api('issue')->all(array(
     'assigned_to_id' => 1,
     // 'cf_x'        => ,
     'query_id'       => 3,
+    'custom_fields'  => array(
+        'id'    => SOME_CUSTOM_FIELD_ID,
+        'value' => 'some value of this custom field',
+    ),
 ));
 $client->api('issue')->create(array(
     'project_id'     => 'test',
@@ -99,6 +104,7 @@ $client->api('issue')->update(140, array(
 
 $client->api('issue')->setIssueStatus(140, 'Resolved');
 $client->api('issue')->addNoteToIssue(140, 'some comment');
+$client->api('issue')->remove(140);
 
 // ----------------------------
 // Issue categories

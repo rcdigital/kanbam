@@ -66,4 +66,6 @@ if ( $action == "loadProjects" ) {
     ));
 } else if ( $action == "loadLastsTasks" ) {
     echo json_encode( $client->api('issue')->all(array( 'limit' => 100 )) );
+} else if ( $action == "loadCurrentUser" ) {
+    echo json_encode( $client->api('user')->getCurrentUser() );
 }
