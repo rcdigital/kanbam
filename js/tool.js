@@ -5,19 +5,17 @@
 */
 
 define(['jquery', 'exports', 'redmine'], function($, exports, redmine){
-    var self = this;
 
     exports.init = function($scope, kanbam) {
-        self.$scope = $scope;
-        self.kanbam = kanbam;
-    }
-    
-    this.start = function() {
-        if (self.$scope.settings.tool == "redmine") {
-            self.$scope.tool = redmine;
+        this.scope = $scope;
+        this.kanbam = kanbam;
+    };
+
+    exports.start = function() {
+        if (this.scope.settings.tool == "redmine") {
+            this.scope.tool = redmine;
         }
-        
-        self.$scope.tool.init(self.$scope, self.kanbam);
-    }
+        this.scope.tool.init(this.scope, this.kanbam);
+    };
 
 });

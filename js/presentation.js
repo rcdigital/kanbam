@@ -5,43 +5,39 @@
 */
 
 define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
-    var self;
 
     exports.init = function($scope) {
         $scope.presentation = new Presentation($scope);
         $scope.presentation.start();
-        self = $scope.presentation;
-    }
+    };
 
     var Presentation = function($scope) {
         this.$scope = $scope;
-        this.self = this;
         this.currentProject = 0;
         this.countInterval = 0;
         this.isInterval = false;
         this.functionInterval = 0;
-
         this.selectedProjects = [];
-    }
+    };
     
     Presentation.prototype.start = function() {
-    }
+    };
 
     Presentation.prototype.getSavedProjects = function() {
-        if ( $.cookie("presentationProjects") != "") {
-            if ( $.cookie("presentationProjects") != undefined ) {
+        if ( $.cookie("presentationProjects") !== "") {
+            if ( $.cookie("presentationProjects") !== undefined ) {
                 var projects = $.cookie("presentationProjects").split(",");
 
                 this.selectedProjects = projects;
 
-                if (projects != undefined ) {
+                if (projects !== undefined ) {
                     for ( var i = 0; i < projects.length; i++ ) {
                         $("#project" + projects[ i ]).attr("checked", true);    
                     }
                 }
             }
         }
-    }
+    };
 
     Presentation.prototype.saveProjects = function() {
         var self = this;
@@ -53,9 +49,10 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
         });
 
         $.cookie("presentationProjects", self.selectedProjects.toString());
-    }
+    };
 
     Presentation.prototype.play = function() {
+        var self = this;
         self.isInterval = true;
 
         clearInterval(self.functionInterval);
@@ -77,24 +74,25 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
                 }
             }, 50 );
         }, 3000 );
-    }
+    };
     
     Presentation.prototype.pause = function() {
-        clearInterval(self.functionInterval);
-    }
+        clearInterval(this.functionInterval);
+    };
     
     Presentation.prototype.nextProject = function() {
-        self.currentProject++;
-        self.countInterval = 0;
+        this.currentProject++;
+        this.countInterval = 0;
 
-        if (self.currentProject >= self.selectedProjects.length ) {
-            self.currentProject = 0;
+        if (this.currentProject >= this.selectedProjects.length ) {
+            this.currentProject = 0;
         }
-        self.gotoProject( self.selectedProjects[ self.currentProject ] );
-    }
+        this.gotoProject( this.selectedProjects[ this.currentProject ] );
+    };
     
     Presentation.prototype.gotoProject = function( id ) {
         $(".loading").show();
         this.$scope.tool.changeProject( id );
-    }
+    };
+
 });

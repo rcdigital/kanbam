@@ -9,7 +9,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
     exports.init = function($scope, kanbam) {
         $scope.tool = new Redmine($scope, kanbam);
         $scope.tool.start();
-    }
+    };
     
     var Redmine = function($scope, kanbam) {
         this.$scope = $scope;
@@ -19,60 +19,55 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.listOfSpentTimesUsed = [];
         this.reloadCount = 0;
         this.totalLoadTasks = 0;
-    }
+    };
     
     Redmine.prototype.start = function() {
         this.proxyURI = this.$scope.settings.appURI + 
             "redmine.php?api_key=" + this.$scope.settings.apiKey + 
             "&redmine_uri=" + this.$scope.settings.redmineURI;
-        
         this.reloadCount++;
-        
         this.loadActivities();
         this.loadSpentTimeActivities();
-    }
+    };
     
     Redmine.prototype.loadActivities = function() {
         this.loadAPI({
             action : "loadActivities"
         }, this.onLoadActivities );
-    }
+    };
     
     Redmine.prototype.onLoadActivities = function(data) {
         this.$scope.activities = [];
-        
         for (var t in data.trackers) {
             this.$scope.activities.push({ 
                 name : data.trackers[t].name, 
                 id : data.trackers[t].id
             });
         }
-        
         this.loadProjects();
-    }
+    };
     
     Redmine.prototype.loadSpentTimeActivities = function() {
         this.loadAPI({
             action : "loadSpentTimeActivities"
         }, this.onLoadSpentTimeActivities );
-    }
+    };
     
     Redmine.prototype.onLoadSpentTimeActivities = function(data) {
         this.$scope.spentTimeActivities = [];
-        
         for (var t in data.time_entry_activities) {
             this.$scope.spentTimeActivities.push({ 
                 name : data.time_entry_activities[t].name, 
                 id : data.time_entry_activities[t].id
             });
         }
-    }
+    };
     
     Redmine.prototype.loadProjects = function() {
         this.loadAPI({
             action : "loadProjects"
         }, this.onLoadProjects );
-    }
+    };
     
     Redmine.prototype.onLoadProjects = function(data) {
         var lastProject = { id : -1, name : "" };
@@ -83,16 +78,16 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             this.$scope.projects.push({
                 id : data.projects[p].id,
                 name : data.projects[p].name,
-                parent : (data.projects[p].parent != undefined) ? data.projects[p].parent.name : "",
+                parent : (data.projects[p].parent !== undefined) ? data.projects[p].parent.name : "",
                 updated_on : data.projects[p].updated_on
             });
             
             if (data.projects[p].id > lastProject.id) {
-                lastProject = { id : data.projects[p].id, name : data.projects[p].name }
+                lastProject = { id : data.projects[p].id, name : data.projects[p].name };
             }    
         }
         
-        if (this.$scope.currentProject.id == null) {
+        if (this.$scope.currentProject.id === null) {
             this.$scope.currentProject = lastProject;
         }
         
@@ -100,23 +95,22 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.totalLoadTasks = 0;
         this.loadTasksByProjectId(this.$scope.currentProject.id);
         this.loadUsersByProjectId(this.$scope.currentProject.id);
-        
         this.kanbam.onUpdateData();
         this.kanbam.projectsEvents();
-    }
+    };
     
     Redmine.prototype.loadUsersByProjectId = function(id) {
         this.loadAPI({
             action : "loadUsersByProjectId",
             project_id : id
         }, this.onLoadUsersByProjectId);
-    }
+    };
     
     Redmine.prototype.onLoadUsersByProjectId = function(data) {
         this.$scope.currentProject.memberships = [];
 
-        if ( data != null ) {
-            for ( m in data.memberships ) {
+        if ( data !== null ) {
+            for ( var m in data.memberships ) {
                 this.$scope.currentProject.memberships.push( data.memberships[ m ].user );
             }
             
@@ -124,16 +118,16 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         } else {
             this.loadCurrentUser();
         }
-    }
+    };
 
     Redmine.prototype.loadCurrentUser = function() {
         this.loadAPI({
             action : "loadCurrentUser"
         }, this.onLoadCurrentUser);
-    }
+    };
     
     Redmine.prototype.onLoadCurrentUser = function(data) {
-        if ( data != null ) {
+        if ( data !== null ) {
             this.$scope.currentProject.memberships.push({
                 name : data.user.firstname + " " + data.user.lastname,
                 id : data.user.id
@@ -141,7 +135,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
 
             this.kanbam.onUpdateData();
         }
-    }
+    };
 
     Redmine.prototype.getProjectById = function(id) {
         for (var i = 0; i < this.$scope.projects.length; i++) {
@@ -149,36 +143,34 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 return this.$scope.projects[i];
             }
         }
-    }
+    };
     
     Redmine.prototype.changeProject = function(id) {
         this.$scope.stories = [];
         this.$scope.currentProject = this.getProjectById(id);
         this.$scope.currentProject.memberships = undefined;
         
-                
         $.cookie("lastProjectId", id);
         $.cookie("lastProjectName", this.getProjectById(id).name);
         
         this.kanbam.onUpdateData();
         
         this.start();
-    }
+    };
     
     Redmine.prototype.loadTasksByProjectId = function(id, offset) {
-        if ( offset == undefined ) {
+        if ( offset === undefined ) {
             offset = 0;
         }
-
         this.loadAPI({
             action : "loadTasksByProjectId",
             id : id,
             offset : offset
         }, this.onLoadTasksByProjectId);
-    }
+    };
     
     Redmine.prototype.onLoadTasksByProjectId = function(data) {
-        if ( data.issues.length != 0 ) {
+        if ( data.issues.length !== 0 ) {
             if (this.reloadCount == 1) {
                 for ( var i in data.issues ) {
                     this.$scope.tasks.push({
@@ -186,9 +178,9 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                         name : data.issues[i].subject,
                         story_id : this.getTaskVersion(data.issues[i]).id,
                         story_name : this.getTaskVersion(data.issues[i]).name,
-                        estimated : ( data.issues[i].estimated_hours == undefined) ? 0 : Number(data.issues[i].estimated_hours),
-                        assigned_to_id : (data.issues[i].assigned_to == undefined) ? "" : data.issues[i].assigned_to.id,
-                        assigned_to_name : (data.issues[i].assigned_to == undefined) ? "" : data.issues[i].assigned_to.name,
+                        estimated : ( data.issues[i].estimated_hours === undefined) ? 0 : Number(data.issues[i].estimated_hours),
+                        assigned_to_id : (data.issues[i].assigned_to === undefined) ? "" : data.issues[i].assigned_to.id,
+                        assigned_to_name : (data.issues[i].assigned_to === undefined) ? "" : data.issues[i].assigned_to.name,
                         status_id : this.getTaskStatus(data.issues[i]).id,
                         status_name : this.getTaskStatus(data.issues[i]).name,
                         type : data.issues[i].tracker.id,
@@ -211,25 +203,25 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             this.reloadCount--;
             this.loadStories(this.$scope.currentProject.id);
         }
-    }
+    };
     
     Redmine.prototype.loadStories = function(project_id) {
         this.loadAPI({
             action : "loadStories",
             project_id : project_id
         }, this.onLoadStories);
-    }
+    };
     
     Redmine.prototype.onLoadStories = function(data) {
         this.$scope.stories = [];
         this.allStories = [];
 
-        if ( data != null ) {
+        if ( data !== null ) {
             for (var v in data.versions) {
                 this.allStories.push({ 
                     id : data.versions[v].id,
                     name : data.versions[v].name,
-                    date : ( data.versions[v].due_date == undefined ) ? "" : data.versions[v].due_date
+                    date : ( data.versions[v].due_date === undefined ) ? "" : data.versions[v].due_date
                 });
             }
             
@@ -238,14 +230,14 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         } else {
             this.kanbam.showError("No stories (versions) registered for this project.");
         }
-    }
+    };
     
     Redmine.prototype.loadSpentTimesByProjectId = function(id) {
         this.loadAPI({
             action : "loadSpentTimesByProjectId",
             project_id : id
         }, this.onLoadSpentTimesByProjectId );
-    }
+    };
     
     Redmine.prototype.onLoadSpentTimesByProjectId = function(data) {
         this.$scope.currentProject.totalSpent = 0;
@@ -254,21 +246,23 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         data.time_entries = _.sortBy(data.time_entries, function(time_entry){ return (time_entry.id * -1); });
         
-        for ( var i = 0; i < this.$scope.tasks.length; i++ ) {
+        var i = 0;
+        
+        for ( i = 0; i < this.$scope.tasks.length; i++ ) {
             this.$scope.tasks[i].spent_time = 0;
             this.$scope.tasks[i].spent_time_list = [];
         }
         
-        for ( t in data.time_entries ) {
+        for ( var t in data.time_entries ) {
             this.$scope.currentProject.totalSpent += data.time_entries[t].hours;
-            for ( var i = 0; i < this.$scope.tasks.length; i++ ) {
-                if ( data.time_entries[t].issue != undefined ) {
+            for ( i = 0; i < this.$scope.tasks.length; i++ ) {
+                if ( data.time_entries[t].issue !== undefined ) {
                     if ( data.time_entries[t].issue.id == this.$scope.tasks[i].id ) {
                         if ( !this.isSpentTimeIdUsed( data.time_entries[t].issue.id  ) ) { 
                             this.$scope.currentProject.totalEstimatedAndSpent += this.$scope.tasks[i].estimated;
                         }
                         
-                        if ( this.$scope.tasks[i].spent_time == undefined ) {
+                        if ( this.$scope.tasks[i].spent_time === undefined ) {
                             this.$scope.tasks[i].spent_time = 0;
                         }
                         
@@ -293,21 +287,26 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.kanbam.onUpdateData();
         this.kanbam.spentTimeEvents();
         this.updateEstimatedBar();
-    }
+    };
     
     Redmine.prototype.formatTasksByStory = function() {
         stories = _.groupBy(this.$scope.tasks, function(task) { return task.story_name; } );
         
         this.$scope.stories = [];
-        
-        for (h in stories) {
+
+        var checkStatusName = function(str){
+            return function(task) { return ( task.status_name === str ); };
+        };
+        var testMemoTaskEstimated = function(memo, task){ return (task.estimated === undefined) ? memo : memo + task.estimated; };
+
+        for (var h in stories) {
             this.$scope.stories.push({ 
                 id: stories[h][0].story_id,
                 name: h, 
-                todo: _.filter(stories[h], function(task) { return ( task.status_name == "TODO" ) == 1; }),
-                doing: _.filter(stories[h], function(task) { return ( task.status_name == "DOING" ) == 1; }), 
-                done: _.filter(stories[h], function(task) { return ( task.status_name == "DONE" ) == 1; }),
-                total_estimated: _.reduce(stories[h], function(memo, task){ return (task.estimated == undefined) ? memo : memo + task.estimated; }, 0),
+                todo: _.filter(stories[h], checkStatusName("TODO")),
+                doing: _.filter(stories[h], checkStatusName("DOING")), 
+                done: _.filter(stories[h], checkStatusName("DONE" )),
+                total_estimated: _.reduce(stories[h], testMemoTaskEstimated, 0),
                 date : this.getDateByStoryId( stories[h][0].story_id )
             });
         }
@@ -319,25 +318,25 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.kanbam.onUpdateData();
         this.kanbam.renderTasks();
-    }
+    };
     
     Redmine.prototype.updateEstimatedBar = function() {
         var totalEstimated = {
-            todo : _.reduce(this.$scope.tasks, function(memo, task){ return (task.estimated != undefined && task.status_name == "TODO") ? memo + task.estimated : memo; }, 0), 
-            doing : _.reduce(this.$scope.tasks, function(memo, task){ return (task.estimated != undefined && task.status_name == "DOING") ? memo + task.estimated : memo; }, 0), 
-            done : _.reduce(this.$scope.tasks, function(memo, task){ return (task.estimated != undefined && task.status_name == "DONE") ? memo + task.estimated : memo; }, 0)
+            todo : _.reduce(this.$scope.tasks, function(memo, task){ return (task.estimated !== undefined && task.status_name === "TODO") ? memo + task.estimated : memo; }, 0), 
+            doing : _.reduce(this.$scope.tasks, function(memo, task){ return (task.estimated !== undefined && task.status_name === "DOING") ? memo + task.estimated : memo; }, 0), 
+            done : _.reduce(this.$scope.tasks, function(memo, task){ return (task.estimated !== undefined && task.status_name === "DONE") ? memo + task.estimated : memo; }, 0)
         };
         
         this.$scope.totalTasks = _.reduce(totalEstimated, function(memo, num){ return memo + num; }, 0);
         
-        this.$scope.currentProject.totalTodo = parseInt( ( totalEstimated.todo / this.$scope.totalTasks ) * 100 );
-        this.$scope.currentProject.totalDoing = parseInt( (totalEstimated.doing / this.$scope.totalTasks ) * 100 );
+        this.$scope.currentProject.totalTodo = parseInt( ( totalEstimated.todo / this.$scope.totalTasks ) * 100, 10);
+        this.$scope.currentProject.totalDoing = parseInt( (totalEstimated.doing / this.$scope.totalTasks ) * 100, 10);
         this.$scope.currentProject.totalDone = 100 - this.$scope.currentProject.totalTodo - this.$scope.currentProject.totalDoing;
         
         this.$scope.currentProject.totalEstimated = Math.round(this.$scope.totalTasks);
         
         this.$scope.currentProject.variation = ( 100 - Math.round( ( this.$scope.currentProject.totalEstimatedAndSpent * 100 ) / this.$scope.currentProject.totalSpent ) );
-    }
+    };
     
     Redmine.prototype.changeStatusTask = function(task) {
         this.loadAPI({
@@ -367,7 +366,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.removeTask = function(id) {
         this.loadAPI({
@@ -379,7 +378,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.addSpentTime = function(spentTime) {
         this.loadAPI({
@@ -388,6 +387,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             hours : spentTime.hours,
             activity_id : spentTime.activityId
         }, this.onAddSpentTime);
+
+        var getSpentTime = function(spent_time){ return (spent_time.id * -1); };
         
         for (i = 0; i < this.$scope.tasks.length; i++) {
             if ( this.$scope.tasks[ i ].id == spentTime.issueId ) {
@@ -399,17 +400,17 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                     hours : spentTime.hours        
                 });
                 
-                this.$scope.tasks[ i ].spent_time_list = _.sortBy(this.$scope.tasks[ i ].spent_time_list, function(spent_time){ return (spent_time.id * -1); });
+                this.$scope.tasks[ i ].spent_time_list = _.sortBy(this.$scope.tasks[ i ].spent_time_list, getSpentTime);
             }
         }
         
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.onAddSpentTime = function() {
         this.refreshSpentTime();
-    }
+    };
     
     Redmine.prototype.removeSpentTime = function(id) {
         this.loadAPI({
@@ -417,11 +418,13 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             id : id
         }, this.onRemoveSpentTime);
         
+        var getSpentTimeId = function(spent_time){ return spent_time.id == id; };
+        
         for (i = 0; i < this.$scope.tasks.length; i++) {
             for (j = 0; j < this.$scope.tasks[ i ].spent_time_list.length; j++) {
                 if ( this.$scope.tasks[ i ].spent_time_list[ j ].id == id ) {
                     this.$scope.tasks[ i ].spent_time -= this.$scope.tasks[ i ].spent_time_list[ j ].hours;
-                    this.$scope.tasks[ i ].spent_time_list = _.reject(this.$scope.tasks[ i ].spent_time_list, function(spent_time){ return spent_time.id == id; });
+                    this.$scope.tasks[ i ].spent_time_list = _.reject(this.$scope.tasks[ i ].spent_time_list, getSpentTimeId);
                 }
             }
         }
@@ -429,18 +432,17 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.$scope.editTask.spent_time_list = _.reject(this.$scope.editTask.spent_time_list, function(spent_time){ return spent_time.id == id; });
         
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.onRemoveSpentTime = function() {
         this.refreshSpentTime();
-    }
+    };
     
     Redmine.prototype.refreshSpentTime = function() {
         this.loadSpentTimesByProjectId(this.$scope.currentProject.id);
-        
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.updateTask = function(task) {
         this.loadAPI({
@@ -463,7 +465,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.addStory = function(story) {
         this.loadAPI({
@@ -483,7 +485,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.reload();
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.addTask = function(task) {
         this.loadAPI({
@@ -511,11 +513,11 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         
         this.formatTasksByStory();
         this.kanbam.onUpdateData();
-    }
+    };
     
     Redmine.prototype.onAddTask = function() {
         this.reload();
-    }
+    };
     
     Redmine.prototype.getDateByStoryId = function(id) {
         for (var i = 0; i < this.allStories.length; i++) {
@@ -523,7 +525,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 return this.allStories[i].date;
             }
         }
-    }
+    };
     
     Redmine.prototype.getStoryById = function(id) {
         for (var i = 0; i < this.$scope.stories.length; i++) {
@@ -531,15 +533,15 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 return this.$scope.stories[i];
             }
         }
-    }
+    };
     
     Redmine.prototype.getTaskVersion = function(issue) {
-        if (issue.fixed_version == undefined) {
+        if (issue.fixed_version === undefined) {
             return {name : "NO STORY", id : 0};
         } else {
             return issue.fixed_version;
         }
-    }
+    };
     
     Redmine.prototype.getTaskStatus = function(issue) {
         if ( issue.status.name == "DOING" ) {
@@ -549,7 +551,7 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         } else {
             return { id : issue.status.id, name : "TODO" };
         }
-    }
+    };
     
     Redmine.prototype.isSpentTimeIdUsed = function(id) {
         for ( var i = 0; i < this.listOfSpentTimesUsed.length; i++ ) {
@@ -561,11 +563,11 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
         this.listOfSpentTimesUsed.push( id );
         
         return false;
-    } 
+    };
     
     Redmine.prototype.reload = function() {
         this.start();
-    }
+    };
     
     Redmine.prototype.loadAPI = function(e, callback) {
         var self = this;
@@ -575,8 +577,8 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             url : this.proxyURI + "&rnd=" + new Date().getTime(),
             data : e,
             success : function(data) {
-                if ( callback != undefined ) {
-                    if ( data != "" ) {
+                if ( callback !== undefined ) {
+                    if ( data !== "" ) {
                         $.proxy(callback, self)(
                             jQuery.parseJSON(data)
                         );
@@ -586,6 +588,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
                 }
             }
         });
-    }
+    };
 
 });
