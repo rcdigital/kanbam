@@ -24,9 +24,11 @@ define(['jquery', 'exports', 'plugins'], function($, exports, plugins){
     };
 
     Presentation.prototype.getSavedProjects = function() {
-        if ( $.cookie("presentationProjects") !== "") {
-            if ( $.cookie("presentationProjects") !== undefined ) {
-                var projects = $.cookie("presentationProjects").split(",");
+        var presentationProjects = $.cookie("presentationProjects");
+        
+        if ( presentationProjects !== "") {
+            if ((presentationProjects !== undefined) && (presentationProjects !== null)) {
+                var projects = presentationProjects.split(",");
 
                 this.selectedProjects = projects;
 

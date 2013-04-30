@@ -11,11 +11,11 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         kanbam.startEvents();
         kanbam.start();
     };
-    
+
     var Kanbam = function($scope) {
         this.$scope = $scope;
     };
-    
+
     Kanbam.prototype.start = function() {
         var self = this;
         this.$scope.kanbam = this;
@@ -24,14 +24,14 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.currentActivity = 0;
         this.isCtrlDown = false;
         this.isPlaying = true;
-        
+
         this.$scope.editTask = { assigned_to_id : -1, assigned_to_name : "Select an user" };
-        
+
         this.$scope.colors = ["", "red", "blue", "green", "purple", "orange", "gray"];
         this.$scope.settings = { appURI : "//" + window.location.host + window.location.pathname };
-        
+
         this.getCookiesSettings();
-        
+
         this.$scope.tool = tool;
         this.$scope.tool.init(this.$scope, this);
 
@@ -41,27 +41,27 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         $(".story-date").datepicker({ autoclose : true });
         $(".search-value").hide();
         $(".footer").stop().animate({ bottom: -46 }, 50, 'easeOutQuad' );
-        
-        if ( this.$scope.settings.apiKey === undefined ) {
+
+        if (this.$scope.settings.apiKey === null) {
             $(".settings").modal();
         } else {
             $(".redmine-uri").val( this.$scope.settings.redmineURI );
             $(".api-key").val( this.$scope.settings.apiKey );
-            
+
             this.$scope.tool.start();
         }
-        
+
         $(window).resize(function() {
             self.fixStoryCell();
             self.fixStoryHeight();
         });
-        
+
         //Shortcut for search
         $(document).keydown(function(e) {
             if ( e.which == 17 ) {
                 this.isCtrlDown = true;
             }
-            
+
             if ( this.isCtrlDown && e.which == 70 ) {
                 $(".search-btn .btn").click();
             }
@@ -146,25 +146,28 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             self.togglePresentationAction();
         });
     };
-    
+
     Kanbam.prototype.startEvents = function() {
         var self = this;
         this.isFooterOpen = false;
-    
-        $(".save-settings").click( this.saveSettings );
+
+        $(".save-settings").click( function() {
+            self.saveSettings();
+        });
+
         $(".close-settings").click( function() {
             $(".loading").hide();
 
-            if ( this.isPresentationMode() ) {
-                this.$scope.presentation.play();
+            if ( self.isPresentationMode() ) {
+                self.$scope.presentation.play();
             }
         });
-         
+
         $(".settings-btn").click( function() {
-            this.$scope.presentation.pause();
+            self.$scope.presentation.pause();
             $(".settings").modal();
         });
-        
+
         $(window).mousemove(function(e) {
             if ( !self.isPresentationMode() ) {
                 if ( !$(".dropdown-menu").is(":visible") && !$(".datepicker").is(":visible") && !$(".detail").is(":visible") ) {
@@ -466,7 +469,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             apiKey.parent().parent().removeClass("error");
             apiKey.parent().find(".help-inline").slideUp("fast");
         }
-        
+
         this.$scope.settings.apiKey     = apiKey.val();
         this.$scope.settings.redmineURI = redmineURI.val();
         this.$scope.settings.tool       = "redmine";
@@ -518,6 +521,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.renderTasks = function() {
         var self = this;
         var dragGetObj = function(e, ui) { this.currentPostIt = $(this); };
+        var doubleClickGetObj = function(e) { self.doubleClickPostIt(e); };
+
         for (var h in this.$scope.stories) {
             var groupColumns = [
                 this.$scope.stories[h].todo, 
@@ -529,7 +534,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
                 for ( var t in groupColumns[gc]) {
                     var postIt = $( "#post" + (groupColumns[gc][t].id) );
                     
-                    postIt.bind('dblclick', this.doubleClickPostIt);
+                    postIt.bind('dblclick', doubleClickGetObj);
                     
                     postIt.draggable({
                         revert: "invalid", 
@@ -561,15 +566,17 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     
     Kanbam.prototype.showEditTask = function(id) {
         var self = this;
-        var task = _.find( this.$scope.tasks, function(task){ return task.id === id; } );
-                
+        var task = _.find( this.$scope.tasks, function(task){ return task.id === parseInt(id); } );
+
         this.$scope.editTask = task;
-        
+
         if (this.$scope.editTask.assigned_to_name === "") {
             $(".detail-assigned-to .btn-label").html( "Select an user" );
         } else {
             $(".detail-assigned-to .btn-label").html( this.$scope.editTask.assigned_to_name );
         }
+
+        $(".detail-impediment").prop('checked', this.$scope.editTask.impediment);
         
         this.onUpdateData();
     
