@@ -560,7 +560,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     };
 
     Kanbam.prototype.doubleClickPostIt = function(e) {
-        console.log('double click');
         this.onUpdateData();
         this.showEditTask(e.currentTarget.id.split("post")[1]);
     };
@@ -568,8 +567,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
     Kanbam.prototype.showEditTask = function(id) {
         var self = this;
         var task = _.find( this.$scope.tasks, function(task){ return task.id === parseInt(id, 10); } );
-        console.log('id: '+task.id);
-        console.log('estimated: '+task.estimated);
 
         this.$scope.editTask = task;
 
