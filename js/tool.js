@@ -12,7 +12,7 @@ define(['jquery', 'exports', 'redmine'], function($, exports, redmine){
     };
 
     exports.start = function() {
-        if (this.scope.settings.tool == "redmine") {
+        if (this.scope.settings.tool === "redmine") {
             this.scope.tool = redmine;
         }
         this.scope.tool.init(this.scope, this.kanbam);
