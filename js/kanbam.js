@@ -24,6 +24,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.currentActivity = 0;
         this.isCtrlDown = false;
         this.isPlaying = true;
+        this.scrollTopPos = 0;
 
         this.$scope.editTask = { assigned_to_id : -1, assigned_to_name : "Select an user" };
 
@@ -517,7 +518,6 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
             activityName : this.$scope.editTask.spent_time_activity_name
         });
     };
-
     Kanbam.prototype.renderTasks = function() {
         var self = this;
         var dragGetObj = function(e, ui) { this.currentPostIt = $(this); };
@@ -552,7 +552,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         this.tasksEvents();
 
         $(".loading").hide(0, function() {
-            $("body").scrollTop(0);
+            $("body").scrollTop(this.scrollTopPos);
             if ( self.isPresentationMode() ) {
                 self.$scope.presentation.play();
             }
@@ -663,6 +663,8 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         }
 
         $(".detail").slideUp("fast");
+
+        this.setScrollTopPos();
 
         if ( $(".detail-impediment").is(':checked') ) {
             this.$scope.tool.changeStatusTask({
@@ -782,4 +784,9 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
         }
         this.isPlaying = !this.isPlaying;
     };
+
+    Kanbam.prototype.setScrollTopPos = function() {
+        return $('body').scrollTop();
+    };
+
 });
