@@ -13,7 +13,7 @@
         <link rel="stylesheet" href="css/main.css">
         <link rel="stylesheet" href="css/datepicker.css">
         <link rel="stylesheet" href="css/style.css">
-        
+
         <script src="js/lib/modernizr-2.6.2.min.js"></script>
     </head>
     <body ng-controller="App">
@@ -54,7 +54,7 @@
                             <div class="btn-group">
                                 <button class="btn button dropdown-toggle btn-inverse" data-toggle="dropdown">
                                      <i class="icon-th-list icon-white-alpha"></i> PROJECTS
-                                   
+
                                 </button>
                                 <ul class="project-list dropdown-menu">
                                     <li ng-repeat="project in projects" ng-switch on="project.parent">
@@ -238,7 +238,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="settings modal hide fade">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -306,7 +306,7 @@
                     <button class="save-settings btn btn-primary">Save changes</button>
                 </div>
             </div>
-            
+
             <div class="detail popover fade in"><div class="arrow"></div><div class="popover-inner"><h3 class="popover-title">Task Edit - #{{editTask.id}}</h3><div class="popover-content"><p>
                 <form class="form-horizontal">
                     <div class="control-group">
@@ -347,9 +347,9 @@
                             <span class="help-inline detail-impediment-help">(Check if this task is in impediment)</span>
                         </div>
                     </div>
-                    
+
                     <hr />
-                    
+
                     <div class="control-group">
                         <label class="control-label">Spent times:</label>
                         <div class="controls">
@@ -366,9 +366,9 @@
                                 </tr>
                                 <tr ng-switch-when="0">
                                     <td class="detail-no-activity" colspan="3">No activity inserted</td>
-                                </tr>                              
+                                </tr>
                             </table>
-                            
+
                             <div class="detail-form-left">
                                 <div class="detail-spent-activities btn-group">
                                     <button class="btn btn-mini btn-label">Select an activity</button>
@@ -387,14 +387,14 @@
                             <div class="detail-form-left">
                                 <button class="detail-spent-add btn btn-mini btn-primary">Add</button>
                             </div>
-                            
+
                             <div class="detail-spent-error">Fill the fields correctly.</div>
                         </div>
-                        
+
                     </div>
-                    
+
                     <hr />
-                    
+
                     <div class="control-group">
                         <div class="left">
                             <a href="#" class="detail-advanced-edit">Advanced edit</a>
@@ -411,8 +411,8 @@
         <div class="loading">
             <div class="loading-icon"><img src="img/loading.gif" /></div>
         </div>
-        
-        <script src="js/lib/angular.min.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js"></script>
         <script data-main="js/main" src="js/lib/require.js"></script>
         <script type="text/javascript">
             function App($scope) {

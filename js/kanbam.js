@@ -30,9 +30,7 @@ define(['jquery', 'plugins', 'exports', 'bootstrap', 'datepicker', 'tool', 'jque
 
         this.$scope.colors = ["", "red", "blue", "green", "purple", "orange", "gray"];
         this.$scope.settings = { appURI : "//" + window.location.host + window.location.pathname };
-
         this.getCookiesSettings();
-
         this.$scope.tool = tool;
         this.$scope.tool.init(this.$scope, this);
 
