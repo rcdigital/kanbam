@@ -32,8 +32,6 @@ define(['jquery', 'kanbam'], function ($, kanbam) {
 		});
 	}
 
-	return {
-		onReadyToStart: onReadyToStart
-	};
+	$(onReadyToStart);
 
 });
