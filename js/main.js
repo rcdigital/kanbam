@@ -6,7 +6,7 @@
 
 require.config({
 	paths: {
-		jquery: 'lib/jquery-1.11.1',
+		jquery: 'lib/jquery-1.11.1.min',
 		jqueryui: 'lib/jquery-ui-1.10.0.custom.min',
 		bootstrap: 'lib/bootstrap.min',
 		underscore: 'lib/underscore-min',
@@ -15,6 +15,9 @@ require.config({
 		presentation: 'presentation'
 	},
 	shim: {
+	    'jquery': {
+	        exports: 'jQuery'
+	    },
         'bootstrap': {
             exports: 'bootstrap',
             deps: ['jquery']
@@ -32,6 +35,8 @@ define(['jquery', 'kanbam'], function ($, kanbam) {
 		});
 	}
 
-	$(onReadyToStart);
+	return {
+		onReadyToStart: onReadyToStart
+	};
 
 });
