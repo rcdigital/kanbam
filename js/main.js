@@ -15,7 +15,10 @@ require.config({
 		presentation: 'presentation'
 	},
 	shim: {
-        'bootstrap': {deps: ['jquery']},
+        'bootstrap': {
+            exports: 'bootstrap',
+            deps: ['jquery']
+        },
         'plugins':{deps: ['jquery']}
     },
     waitSeconds: 5000
