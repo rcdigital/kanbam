@@ -579,7 +579,6 @@ define(['jquery', 'exports', 'underscore'], function($, exports, underscore){
             success : function(data) {
                 if ( callback !== undefined ) {
                     if ( data !== "" ) {
-                        console.log(data);
                         $.proxy(callback, self)(
                             jQuery.parseJSON(data)
                         );
