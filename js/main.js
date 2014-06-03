@@ -17,7 +17,8 @@ require.config({
 	shim: {
         'bootstrap': {deps: ['jquery']},
         'plugins':{deps: ['jquery']}
-    }
+    },
+    waitSeconds: 5000
 });
 
 define(['jquery', 'kanbam'], function ($, kanbam) {
