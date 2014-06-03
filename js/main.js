@@ -4,9 +4,9 @@
 * http://www.apache.org/licenses/LICENSE-2.0.txt
 */
 
-require.config({ 
-	paths: { 
-		jquery: 'lib/jquery-1.9.0.min',
+require.config({
+	paths: {
+		jquery: 'lib/jquery-1.11.1',
 		jqueryui: 'lib/jquery-ui-1.10.0.custom.min',
 		bootstrap: 'lib/bootstrap.min',
 		underscore: 'lib/underscore-min',
@@ -15,8 +15,8 @@ require.config({
 		presentation: 'presentation'
 	},
 	shim: {
-        'bootstrap': ['jquery'],
-        'plugins': ['jquery']
+        'bootstrap': {deps: ['jquery']},
+        'plugins':{deps: ['jquery']}
     }
 });
 
