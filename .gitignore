@@ -13,7 +13,8 @@ fabfile.py
 fabfile.pyc
 user.py
 user.pyc
-
+node_modules
+bower_components
 
 error_log
 access_log
