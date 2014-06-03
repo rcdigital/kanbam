@@ -1,0 +1,13 @@
+{
+  "name": "terceiro-turno",
+  "private": true,
+  "dependencies": {
+    "jquery": "~1.11.0",
+    "swfobject": "*",
+    "requirejs": "~2.1.13",
+    "mout": "~0.9.1",
+    "signals": "~1.0.0",
+    "gsap": "~1.11.8"
+  },
+  "devDependencies": {}
+}

@@ -43,3 +43,9 @@ define(['jquery', 'kanbam'], function ($, kanbam) {
 	};
 
 });
+
+function App($scope) {
+    require(['main'], function(main){
+        main.onReadyToStart($scope);
+    });
+}
