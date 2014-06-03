@@ -19,7 +19,6 @@ require.config({
 	        exports: 'jQuery'
 	    },
         'bootstrap': {
-            exports: 'bootstrap',
             deps: ['jquery']
         },
         'plugins':{deps: ['jquery']}
